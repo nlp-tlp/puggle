@@ -5,8 +5,12 @@ import random
 import logging as logger
 from json import JSONDecodeError
 from typing import List
+from py2neo import Graph
+from dotenv import load_dotenv
 
 from .Document import Document
+
+load_dotenv()
 
 
 class Dataset(object):
@@ -39,6 +43,57 @@ class Dataset(object):
         """
         for doc in self.documents:
             doc.flatten()
+
+    def load_into_neo4j(self, recreate=False):
+        """Load the Dataset into a Neo4j database.
+
+        Raises:
+            RuntimeError: Description
+
+        Args:
+            recreate (bool, optional): If true, the Neo4j db will be
+               cleared prior to inserting the documents into it.
+        """
+        # Init graph
+        graph = Graph(
+            password=os.getenv("NEO4J_PASSWORD"),
+            port=os.getenv("NEO4J_PORT")
+            if "NEO4J_PORT" in os.environ
+            else 7687,
+        )
+
+        # Attempt to run a query to make sure it is working
+        try:
+            graph.run("MATCH () RETURN 1 LIMIT 1")
+        except Exception as e:
+            raise RuntimeError(
+                "The Neo4j graph does not appear to be running. "
+                "Please run Neo4j on port 7687 to proceed."
+            )
+
+        if recreate:
+            graph.run("MATCH (n) DETACH DELETE (n)")
+
+        for i, d in enumerate(self.documents):
+            if d.relations is None:
+                continue
+            for rel in d.relations:
+                # Avoid cyclical relationships
+                if rel.start.tokens == rel.end.tokens:
+                    continue
+
+                # Create relationship between head and tail
+                cypher = (
+                    f"MERGE (e1:Entity:{rel.start.get_first_label()} {{name: "
+                    f"\"{' '.join(rel.start.tokens)}\"}})\n"
+                    f"MERGE (e2:Entity:{rel.end.get_first_label()}  {{name: "
+                    f"\"{' '.join(rel.end.tokens)}\"}})\n"
+                    f"MERGE (e1)-[r:{rel.label}]->(e2)"
+                )
+                graph.run(cypher)
+                if i > 0 and i % 10 == 0:
+                    print(f"Processed {i} documents")
+        print("Graph creation complete.")
 
     def _load_documents_from_file(self, filename: os.path):
         """Load a list of Document objects from the given file.
