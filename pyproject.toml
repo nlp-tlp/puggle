@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ettools"
+version = "0.1.0"
+description = ""
+authors = ["Michael Stewart <michael.stewart.webdev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+colorama = "^0.4.6"
+py2neo = "^2021.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

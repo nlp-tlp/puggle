@@ -1,0 +1,14 @@
+[
+    {
+        "tokens": ["one", "three", "two"],
+        "mentions": [
+            { "start": 0, "end": 1, "labels": ["number"] },
+            { "start": 1, "end": 2, "labels": ["number"] },
+            { "start": 2, "end": 3, "labels": ["number"] }
+        ],
+        "relations": [
+            { "start": 1, "end": 0, "type": "bigger_than" },
+            { "start": 1, "end": 2, "type": "bigger_than" }
+        ]
+    }
+]
