@@ -61,8 +61,6 @@ class Dataset(object):
                 "present in order to load Documents."
             )
 
-        num_rows = 2
-
         structured_fields = []
         annotations = []
 
