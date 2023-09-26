@@ -7,3 +7,5 @@ Code for working with Entity Typing datasets.
 To build the docs:
 
     poetry run pdoc3 puggle --html
+
+TODO: try sphinx
