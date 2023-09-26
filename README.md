@@ -75,3 +75,7 @@ This output follows the same format as many modern entity typing/information ext
 ### Why is it called Puggle?
 
 This is a super lightweight version of [Echidna](https://github.com/nlp-tlp/mwo2kg-and-echidna), our software application for constructing knowledge graphs from unstructured text. A puggle is a baby Echidna, so it seemed appropriate!
+
+It also works as an acronym!
+
+Puggle = Python Utilities for Generating Graphs from Linked Entities
