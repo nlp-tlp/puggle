@@ -15,6 +15,8 @@ You can install this package via poetry:
 
 We plan to release it on PyPI soon.
 
+To be able to use the `load_into_neo4j` function from the `Dataset` class, you will need to have Neo4j installed and running on your machine. The easiest way to do this is via Docker, though in the interest of keeping this package light we do not include a dockerfile here.
+
 ## Basic functionality
 
 At the moment the functionality is quite basic. Here is an example of loading in a set of annotations from a machine learning model, combining those annotations with a structured dataset, and then loading it all into Neo4j.
@@ -27,6 +29,10 @@ At the moment the functionality is quite basic. Here is an example of loading in
     d.load_into_neo4j(recreate=True)
 
 For this to work, your `documents.csv` and `annotations.json` need to have the same number of rows. Each row in one dataset must correspond to the other. For example, row 5 of `documents.csv` should be the structured fields corresponding to the annotation in row 5 of `annotations.json`.
+
+Once loaded into Neo4j, you'll end up with something like this:
+
+![image of the graph](https://github.com/nlp-tlp/puggle/blob/main/graph.png?raw=true)
 
 ## How does my data need to be formatted to use Puggle?
 
