@@ -1,6 +1,7 @@
 """A dataset that stores tokens and labels in ET format."""
 import os
 import json
+import csv
 import random
 import logging as logger
 from json import JSONDecodeError
@@ -93,9 +94,22 @@ class Dataset(object):
 
         Args:
             filename (os.path): The filename to load.
-        """
 
-        documents = [{"test": 5, "x": 6}, {"test": 7, "x": "test"}]
+        Returns:
+            List[Dict]: A list of rows, where each row contains {k : v}
+               pairs for each field.
+
+        Raises:
+            ValueError: If the file is not a .csv file.
+        """
+        if not filename.endswith(".csv"):
+            raise ValueError("File must be a CSV file.")
+
+        documents = []
+        with open(filename, "r") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                documents.append(row)
         return documents
 
     def _load_annotations(self, filename: os.path):
