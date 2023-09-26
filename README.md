@@ -8,6 +8,8 @@ This library is designed to provide utilities for working with the outputs of en
 
 We do not include any code for actually running machine learning models here. Puggle is purely designed for loading the results of such models into Python-based classes and then easily importing the data into Neo4j.
 
+Full documentation available on [ReadtheDocs](https://puggle.readthedocs.io/en/latest/).
+
 ## Installation
 
 You can install this package via poetry:
