@@ -46,20 +46,23 @@ class Dataset(object):
 
     def load_into_neo4j(self, recreate=False):
         """Load the Dataset into a Neo4j database.
+        Automatically creates Nodes from the entities (mentions) appearing
+        in each document, and relationships between them via the Relations.
 
         Raises:
-            RuntimeError: Description
+            RuntimeError: If the Neo4j server is not running.
 
         Args:
             recreate (bool, optional): If true, the Neo4j db will be
                cleared prior to inserting the documents into it.
         """
+
+        port = os.getenv("NEO4J_PORT") if "NEO4J_PORT" in os.environ else 7687
+
         # Init graph
         graph = Graph(
             password=os.getenv("NEO4J_PASSWORD"),
-            port=os.getenv("NEO4J_PORT")
-            if "NEO4J_PORT" in os.environ
-            else 7687,
+            port=port,
         )
 
         # Attempt to run a query to make sure it is working
@@ -68,7 +71,7 @@ class Dataset(object):
         except Exception as e:
             raise RuntimeError(
                 "The Neo4j graph does not appear to be running. "
-                "Please run Neo4j on port 7687 to proceed."
+                f"Please run Neo4j on port {port} to proceed."
             )
 
         if recreate:
