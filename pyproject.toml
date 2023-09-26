@@ -12,6 +12,9 @@ py2neo = "^2021.2.3"
 python-dotenv = "^1.0.0"
 
 
+[tool.poetry.group.dev.dependencies]
+pdoc3 = "^0.10.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
