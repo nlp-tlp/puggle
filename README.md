@@ -1,12 +1,14 @@
 # Puggle
 
-This library is designed to provide utilities for working with the outputs of entity typing models such as [SPERT](https://github.com/lavis-nlp/spert/), [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing), etc. It has three main purposes:
+This library is designed to provide utilities for working with the outputs of entity typing models such as [SPERT](https://github.com/lavis-nlp/spert/), [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing), or annotation tools such as [Quickgraph](https://quickgraph.tech/). Puggle has three main purposes:
 
     - Provide easy parsing of the output (i.e. annotations) of entity typing models
     - Enable the connection between structured data (csv) and those annotations
     - Provide functionality to easily load the structured data + annotations into a Neo4j graph
 
-## Running the code
+We do not include any code for actually running machine learning models here. Puggle is purely designed for loading the results of such models into Python-based classes and then easily importing the data into Neo4j.
+
+## Installation
 
 You can install this package via poetry:
 
@@ -49,6 +51,8 @@ The format required for the structured fields is straightforward. It just needs 
     one three two,12/05/2020,4,test
     four six five,04/05/2020,12,another
 
+When using `load_into_neo4j`, the structured fields will be included as properties on the Document nodes.
+
 ### Annotations
 
 The format for the annotations must be as follows:
@@ -65,3 +69,9 @@ The format for the annotations must be as follows:
             { "start": 1, "end": 2, "type": "bigger_than" }
         ]
     }
+
+This output follows the same format as many modern entity typing/information extraction models such as [SPERT](https://github.com/lavis-nlp/spert/) and [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing). It is also compatible with [Quickgraph](https://quickgraph.tech/).
+
+### Why is it called Puggle?
+
+This is a super lightweight version of [Echidna](https://github.com/nlp-tlp/mwo2kg-and-echidna), our software application for constructing knowledge graphs from unstructured text. A puggle is a baby Echidna, so it seemed appropriate!
