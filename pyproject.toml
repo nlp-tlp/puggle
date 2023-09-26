@@ -13,7 +13,7 @@ python-dotenv = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
-pdoc3 = "^0.10.0"
+mkdocs = "^1.5.3"
 
 [build-system]
 requires = ["poetry-core"]
