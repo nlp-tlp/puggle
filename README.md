@@ -23,29 +23,59 @@ It is also available on PyPI ([link](https://pypi.org/project/puggle/)), so rath
 
 To be able to use the `load_into_neo4j` function from the `Dataset` class, you will need to have Neo4j installed and running on your machine. The easiest way to do this is via Docker, though in the interest of keeping this package light we do not include a dockerfile here.
 
+To use the `load_into_neo4j` function you also need to set an environment variable for your Neo4j password. You can do this by creating an empty `.env` file in the root directory of this repository and including:
+
+    NEO4J_PASSWORD=<your neo4j password>
+
 ## Basic functionality
 
-At the moment the functionality is quite basic. Here is an example of loading in a set of annotations from a machine learning model, combining those annotations with a structured dataset, and then loading it all into Neo4j.
+### Loading structured data and annotations from files
+
+Here is an example of loading in a set of annotations from a machine learning model, and combining those annotations with a structured CSV dataset.
+
+First, import puggle and create an empty `Dataset`:
 
     from puggle import Dataset
-
     d = Dataset()
+
+Then you can use the `load_documents` function to load a list of documents from a CSV file and a JSON file. Your structured data should be stored in the csv, and your annotations (e.g. the output of a machine learning model such as SPERT) should be stored in the JSON file.
+
     d.load_documents("sample_data/documents.csv", "sample_data/annotations.json")
+
+### Creating documents programatically
+
+You can also create a dataset and populate it programatically.
+
+TODO: Write functions to do this and include this in the README
+
+### Loading your data into Neo4j automatically
+
+Once they are loaded, you can use the `load_into_neo4j` function to automatically create a Neo4j graph:
 
     d.load_into_neo4j(recreate=True)
 
-For this to work, your `documents.csv` and `annotations.json` need to have the same number of rows. Each row in one dataset must correspond to the other. For example, row 5 of `documents.csv` should be the structured fields corresponding to the annotation in row 5 of `annotations.json`.
+The `recreate=True` causes the graph to be recreated from scratch.
 
-Once loaded into Neo4j, you'll end up with something like this:
+You can then open up the Neo4j browser and write queries over your documents/entities/relationships. For example, here is what it looks like when running `MATCH (n) RETURN n` on the sample data:
 
 ![image of the graph](https://github.com/nlp-tlp/puggle/blob/main/graph.png?raw=true)
 
+### Further documentation
+
+For full documentation see the [ReadtheDocs](https://puggle.readthedocs.io/en/latest/).
+
 ## How does my data need to be formatted to use Puggle?
 
-Puggle reads two types of files:
+Puggle's `Document.load_documents()` function reads two types of files:
 
--   Structured fields, i.e. CSV datasets
--   Annotations, i.e. a dictionary containing `tokens`, `entities` (or `mentions`), and `relations`.
+-   The first argument is the file containing the structured fields, i.e. a CSV dataset
+-   The second argument is the file containing the annotations, i.e. a dictionary containing `tokens`, `entities` (or `mentions`), and `relations`.
+
+Your structured fields (csv) and annotations (json) need to have the same number of rows. Each row in one dataset must correspond to the other. For example, row 5 of `documents.csv` should be the structured fields corresponding to the annotation in row 5 of `annotations.json`.
+
+Typically your "annotations" would be the output of labelling one of the fields from the structured data using something like SPERT. For example, in your structured data you might have a field `short_text_description`, which might contain textual descriptions of events. Your annotations file could contain the annotated sentences from those descriptions, capturing the entities appearing within them, and the relationships between those entities.
+
+In the example below we have used the `text` field as an example. In the structured fields file, it is the first column, containing sentences such as "one two three" and "four five six". In our annotations file, each sentence has been labelled with its corresponding entities, and the relationships between those entities. The ordering between the two files is the same, thus each annotation from row `x` of the annotations file corresponds to the same set of structured fields from row `x` of the structured fields file.
 
 ### Structured fields
 
