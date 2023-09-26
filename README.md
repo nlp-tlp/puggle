@@ -17,7 +17,9 @@ You can install this package via poetry:
     pip install poetry
     poetry install
 
-We plan to release it on PyPI soon.
+It is also available on PyPI, so rather than cloning this repo, you can install it via pip:
+
+    pip install puggle
 
 To be able to use the `load_into_neo4j` function from the `Dataset` class, you will need to have Neo4j installed and running on your machine. The easiest way to do this is via Docker, though in the interest of keeping this package light we do not include a dockerfile here.
 
