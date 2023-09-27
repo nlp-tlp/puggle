@@ -19,6 +19,7 @@ We do not include any code for actually running machine learning models here. Pu
 
    installation
    basic_functionality
+   data_format
    puggle
 
 Indices and tables
