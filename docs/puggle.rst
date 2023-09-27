@@ -1,5 +1,5 @@
-puggle package
-==============
+API Reference
+=============
 
 Submodules
 ----------

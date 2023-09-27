@@ -61,8 +61,7 @@ class Dataset(object):
         structured data csv must correspond to row 3 of the annotations json.
 
         Args:
-            sd_filename (os.path, optional): The filepath of the structured
-               data.
+            sd_filename (os.path, optional): The filepath of the structured data.
             anns_filename (os.path, optional): The filepath of the annotations.
         """
         if sd_filename is None and anns_filename is None:
@@ -99,12 +98,12 @@ class Dataset(object):
         Automatically creates Nodes from the entities (mentions) appearing
         in each document, and relationships between them via the Relations.
 
+        Args:
+            recreate (bool, optional): If true, the Neo4j db will be cleared
+                prior to inserting the documents into it.
+
         Raises:
             RuntimeError: If the Neo4j server is not running.
-
-        Args:
-            recreate (bool, optional): If true, the Neo4j db will be
-               cleared prior to inserting the documents into it.
         """
 
         port = os.getenv("NEO4J_PORT") if "NEO4J_PORT" in os.environ else 7687
