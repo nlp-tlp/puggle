@@ -39,6 +39,15 @@ class Dataset(object):
         with open(filename, "w") as f:
             json.dump([doc.to_dict() for doc in self.documents], f)
 
+    def add_document(self, document: Document):
+        """Add the given Document to this Dataset.
+
+        Args:
+            document (Document): The Document to add.
+
+        """
+        self.documents.append(document)
+
     def load_documents(
         self,
         sd_filename: os.path = None,
@@ -79,13 +88,101 @@ class Dataset(object):
             )
 
         documents = []
-        for i, (sf, ann) in enumerate(zip(structured_fields, annotations)):
-            d = Document(i)
-            d.add_fields(sf)
-            d.add_annotation(ann)
+        for sf, ann in zip(structured_fields, annotations):
+            d = Document(sf, ann)
             documents.append(d)
 
         self.documents = documents
+
+    def load_into_neo4j(self, recreate=False):
+        """Load the Dataset into a Neo4j database.
+        Automatically creates Nodes from the entities (mentions) appearing
+        in each document, and relationships between them via the Relations.
+
+        Raises:
+            RuntimeError: If the Neo4j server is not running.
+
+        Args:
+            recreate (bool, optional): If true, the Neo4j db will be
+               cleared prior to inserting the documents into it.
+        """
+
+        port = os.getenv("NEO4J_PORT") if "NEO4J_PORT" in os.environ else 7687
+
+        # Init graph
+        graph = Graph(
+            password=os.getenv("NEO4J_PASSWORD"),
+            port=port,
+        )
+
+        # Attempt to run a query to make sure it is working
+        try:
+            graph.run("MATCH () RETURN 1 LIMIT 1")
+        except Exception as e:
+            raise RuntimeError(
+                "The Neo4j graph does not appear to be running. "
+                f"Please run Neo4j on port {port} to proceed."
+            )
+
+        if recreate:
+            graph.run("MATCH (n) DETACH DELETE (n)")
+
+        for i, d in enumerate(self.documents):
+            # Create node for document
+            cypher = f"MERGE (d:Document {{doc_idx: {i}}})"
+            graph.run(cypher)
+
+            ann = d.annotation
+            # If this doc has no annotation, skip the creation of
+            # entities and relationships
+            if ann is None:
+                continue
+
+            # Update the Document node to copy over each of the fields
+            # from the CSV dataset
+            if d.fields:
+                for k, v in d.fields.items():
+                    val = ('"' + v + '"') if type(v) is str else v
+                    cypher = (
+                        f"MATCH (d:Document {{doc_idx: {i}}})\n"
+                        f"SET d.{k} = {val}"
+                    )
+                    graph.run(cypher)
+
+            # Do not continue building the graph if the annotation
+            # has no relationships between entities
+            if ann.relations is None:
+                continue
+            for rel in ann.relations:
+                # Avoid cyclical relationships
+                if rel.start.tokens == rel.end.tokens:
+                    continue
+
+                # Create relationship between head and tail
+                cypher = (
+                    f"MATCH (d:Document {{doc_idx: {i}}})\n"
+                    f"MERGE (e1:Entity:{rel.start.get_first_label()} {{name: "
+                    f"\"{' '.join(rel.start.tokens)}\"}})\n"
+                    f"MERGE (e2:Entity:{rel.end.get_first_label()}  {{name: "
+                    f"\"{' '.join(rel.end.tokens)}\"}})\n"
+                    f"MERGE (e1)-[r:{rel.label}]->(e2)\n"
+                    f"MERGE (e1)-[:APPEARS_IN]->(d)\n"
+                    f"MERGE (e2)-[:APPEARS_IN]->(d)"
+                )
+                graph.run(cypher)
+                if i > 0 and i % 10 == 0:
+                    print(f"Processed {i} documents")
+        print("Graph creation complete.")
+
+    def create_neo4j_csvs():
+        """A function to generate a set of CSVs to load into Neo4j via
+        IMPORT statements (an alternative for those who want to be able
+        to save their graph to disk somehow and import it later/elsewhere).
+
+        Raises:
+            NotImplementedError: Description
+        """
+        raise NotImplementedError
 
     def _load_structured_data(self, filename: os.path):
         """Load a list of structured data from the given file.
@@ -155,86 +252,6 @@ class Dataset(object):
                 )
         logger.debug(f"Loaded {len(annotations)} annotations from {filename}.")
         return annotations
-
-    def load_into_neo4j(self, recreate=False):
-        """Load the Dataset into a Neo4j database.
-        Automatically creates Nodes from the entities (mentions) appearing
-        in each document, and relationships between them via the Relations.
-
-        Raises:
-            RuntimeError: If the Neo4j server is not running.
-
-        Args:
-            recreate (bool, optional): If true, the Neo4j db will be
-               cleared prior to inserting the documents into it.
-        """
-
-        port = os.getenv("NEO4J_PORT") if "NEO4J_PORT" in os.environ else 7687
-
-        # Init graph
-        graph = Graph(
-            password=os.getenv("NEO4J_PASSWORD"),
-            port=port,
-        )
-
-        # Attempt to run a query to make sure it is working
-        try:
-            graph.run("MATCH () RETURN 1 LIMIT 1")
-        except Exception as e:
-            raise RuntimeError(
-                "The Neo4j graph does not appear to be running. "
-                f"Please run Neo4j on port {port} to proceed."
-            )
-
-        if recreate:
-            graph.run("MATCH (n) DETACH DELETE (n)")
-
-        for i, d in enumerate(self.documents):
-            # Create node for document
-            cypher = f"MERGE (d:Document {{doc_idx: {d.doc_idx}}})"
-            graph.run(cypher)
-
-            ann = d.annotation
-            # If this doc has no annotation, skip the creation of
-            # entities and relationships
-            if ann is None:
-                continue
-
-            # Update the Document node to copy over each of the fields
-            # from the CSV dataset
-            if d.fields:
-                for k, v in d.fields.items():
-                    val = ('"' + v + '"') if type(v) is str else v
-                    cypher = (
-                        f"MATCH (d:Document {{doc_idx: {d.doc_idx}}})\n"
-                        f"SET d.{k} = {val}"
-                    )
-                    graph.run(cypher)
-
-            # Do not continue building the graph if the annotation
-            # has no relationships between entities
-            if ann.relations is None:
-                continue
-            for rel in ann.relations:
-                # Avoid cyclical relationships
-                if rel.start.tokens == rel.end.tokens:
-                    continue
-
-                # Create relationship between head and tail
-                cypher = (
-                    f"MATCH (d:Document {{doc_idx: {d.doc_idx}}})\n"
-                    f"MERGE (e1:Entity:{rel.start.get_first_label()} {{name: "
-                    f"\"{' '.join(rel.start.tokens)}\"}})\n"
-                    f"MERGE (e2:Entity:{rel.end.get_first_label()}  {{name: "
-                    f"\"{' '.join(rel.end.tokens)}\"}})\n"
-                    f"MERGE (e1)-[r:{rel.label}]->(e2)\n"
-                    f"MERGE (e1)-[:APPEARS_IN]->(d)\n"
-                    f"MERGE (e2)-[:APPEARS_IN]->(d)"
-                )
-                graph.run(cypher)
-                if i > 0 and i % 10 == 0:
-                    print(f"Processed {i} documents")
-        print("Graph creation complete.")
 
     def __repr__(self):
         """String representation of the dataset.

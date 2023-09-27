@@ -44,9 +44,51 @@ Then you can use the `load_documents` function to load a list of documents from 
 
 ### Creating documents programatically
 
-You can also create a dataset and populate it programatically.
+You can also create a dataset and populate it programatically. Here is an example of creating the same Dataset as above, but fully in Python.
 
-TODO: Write functions to do this and include this in the README
+    from puggle import Dataset, Document, Annotation
+
+    d = Dataset()
+
+    f1 = {"text": "one three two", "date": "12/05/2020", "x": "4", "y": "test"}
+    a1 = Annotation.from_dict(
+        {
+            "tokens": ["one", "three", "two"],
+            "mentions": [
+                {"start": 0, "end": 1, "labels": ["number"]},
+                {"start": 1, "end": 2, "labels": ["number"]},
+                {"start": 2, "end": 3, "labels": ["number"]},
+            ],
+            "relations": [
+                {"start": 1, "end": 0, "type": "bigger_than"},
+                {"start": 1, "end": 2, "type": "bigger_than"},
+            ],
+        }
+    )
+
+    doc1 = Document(f1, a1)
+    d.add_document(doc1)
+
+    f2 = {"text": "four six five", "date": "04/05/2020", "x": "12", "y": "another"}
+    a2 = Annotation.from_dict(
+        {
+            "tokens": ["four", "six", "five"],
+            "mentions": [
+                {"start": 0, "end": 1, "labels": ["number"]},
+                {"start": 1, "end": 2, "labels": ["number"]},
+                {"start": 2, "end": 3, "labels": ["number"]},
+            ],
+            "relations": [
+                {"start": 1, "end": 0, "type": "bigger_than"},
+                {"start": 1, "end": 2, "type": "bigger_than"},
+            ],
+        }
+    )
+
+    doc2 = Document(f2, a2)
+    d.add_document(doc2)
+
+Note that we call the `from_dict` function in the `Annotation` class to convert the dictionary into an Annotation object. We can then include the fields (dictionary) and this Annotation object as arguments to the constructor of the `Document` class, then add this newly-created `Document` object to our dataset.
 
 ### Loading your data into Neo4j automatically
 
@@ -106,10 +148,16 @@ The format for the annotations must be as follows:
 
 This output follows the same format as many modern entity typing/information extraction models such as [SPERT](https://github.com/lavis-nlp/spert/) and [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing). It is also compatible with [Quickgraph](https://quickgraph.tech/).
 
-### Why is it called Puggle?
+## Why is it called Puggle?
 
 This is a super lightweight version of [Echidna](https://github.com/nlp-tlp/mwo2kg-and-echidna), our software application for constructing knowledge graphs from unstructured text. A puggle is a baby Echidna, so it seemed appropriate!
 
 It also works as an acronym!
 
 Puggle = Python Utilities for Generating Graphs from Linked Entities
+
+## TODO
+
+-   Automatic parsing of dates, floats, etc, when building the Neo4j graph
+-   A function in the `Dataset` class (`create_neo4j_csvs()`) to create CSVs to import into Neo4j, so that they can be created and then imported later/elsewhere
+-   Unit tests
