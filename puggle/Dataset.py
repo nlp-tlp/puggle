@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 from .Document import Document
 from .Annotation import Annotation
+from .utils import validate_anns_format, normalise_annotation_format
 
 load_dotenv()
 
@@ -52,6 +53,7 @@ class Dataset(object):
         self,
         sd_filename: os.path = None,
         anns_filename: os.path = None,
+        anns_format: str = None,
     ):
         """Load a set of documents given the filepath of the structured data
         (a .csv file), and the filepath of the annotations (a .json file).
@@ -61,14 +63,20 @@ class Dataset(object):
         structured data csv must correspond to row 3 of the annotations json.
 
         Args:
-            sd_filename (os.path, optional): The filepath of the structured data.
-            anns_filename (os.path, optional): The filepath of the annotations.
+            format (str): The format of the annotations file. Can be either
+               "quickgraph" or "spert".
+            sd_filename (os.path, optional): The filepath of the structured
+               data.
+            anns_filename (os.path, optional): The filepath of the
+               annotations.
         """
         if sd_filename is None and anns_filename is None:
             raise ValueError(
                 "Either sd_filename or anns_filename (or both) must be "
                 "present in order to load Documents."
             )
+        if anns_filename is not None:
+            validate_anns_format(anns_format)
 
         structured_fields = []
         annotations = []
@@ -76,7 +84,7 @@ class Dataset(object):
         if sd_filename is not None:
             structured_fields = self._load_structured_data(sd_filename)
         if anns_filename is not None:
-            annotations = self._load_annotations(anns_filename)
+            annotations = self._load_annotations(anns_filename, anns_format)
 
         if all((structured_fields, annotations)) and len(
             structured_fields
@@ -85,6 +93,9 @@ class Dataset(object):
                 "Mismatch between the length of the structured "
                 "fields dataset and the annotations dataset."
             )
+
+        if len(structured_fields) == 0:
+            structured_fields = [None] * len(annotations)
 
         documents = []
         for sf, ann in zip(structured_fields, annotations):
@@ -208,7 +219,7 @@ class Dataset(object):
                 documents.append(row)
         return documents
 
-    def _load_annotations(self, filename: os.path):
+    def _load_annotations(self, filename: os.path, anns_format: str):
         """Load a list of annotations from the given file.
         File must be a .json file. Each annotation must be in the correct
         format, e.g:
@@ -228,6 +239,8 @@ class Dataset(object):
 
         Args:
             filename (os.path): The filename to load.
+            format (str): The format of the annotations. Can be either
+               'quickgraph' or 'spert'.
 
         Returns:
             list: A list of Annotations.
@@ -242,6 +255,8 @@ class Dataset(object):
             try:
                 d = json.load(f)
                 for i, doc in enumerate(d):
+                    doc = normalise_annotation_format(doc, anns_format)
+
                     annotations.append(Annotation.from_dict(doc))
 
             except (JSONDecodeError, ValueError) as e:

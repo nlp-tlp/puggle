@@ -1,6 +1,6 @@
 """A class that stores documents in Mention format."""
 
-from typing import List
+from typing import List, Dict
 
 from .Mention import Mention
 from .Relation import Relation
@@ -56,7 +56,7 @@ class Annotation(object):
             else None,
         }
 
-    def _parse_mentions(self, mentions, tokens):
+    def _parse_mentions(self, mentions: List[Dict], tokens: List[Dict]):
         """Parse a list of mentions (which should each be stored as a dict).
         Ignore duplicate mentions i.e. mentions with the same start,
         end, and label.
@@ -81,22 +81,24 @@ class Annotation(object):
         # so that relations can be correctly created.
         self._mention_ids_map = {}
 
+        label_key = "labels"
+
         for i, m in enumerate(mentions):
             try:
                 m_obj = Mention(
                     m["start"],
                     m["end"],
                     tokens[m["start"] : m["end"]],
-                    m["labels"] if "labels" in m else [m["type"]],
+                    m[label_key],
                     i,
                 )
                 self._mention_ids_map[i] = m_obj
             except KeyError as e:
                 logger.error(
                     f"Could not parse document due to "
-                    "missing keys. The 'mentions' key of each document must "
-                    "have 'start', 'end', 'tokens', and either 'labels' "
-                    "or 'type'."
+                    "missing keys. The 'entities/mentions' key of each "
+                    "document must have 'start', 'end', 'tokens', "
+                    "and either 'labels' or 'type'."
                 )
 
             if str(m_obj) not in seen_mentions:
@@ -105,7 +107,7 @@ class Annotation(object):
 
         return mentions_list
 
-    def _parse_relations(self, relations) -> List[Relation]:
+    def _parse_relations(self, relations: List[Dict]) -> List[Relation]:
         """Parse a given list of relations (which each should be a dict)
         and return a list of Relation objects.
 
@@ -120,8 +122,8 @@ class Annotation(object):
         relations_list = []
         _mention_ids_map = self._mention_ids_map
         for r in relations:
-            start_key = "start" if "start" in r else "head"
-            end_key = "end" if "end" in r else "tail"
+            start_key = "start"
+            end_key = "end"
             try:
                 r_obj = Relation(
                     _mention_ids_map[r[start_key]],
@@ -133,7 +135,7 @@ class Annotation(object):
                 raise KeyError(
                     f"Could not parse relations of document "
                     "due to missing keys. The 'relations' key of each "
-                    "document must have 'start'/'head', 'end'/'tail', "
+                    "document must have 'start', 'end', "
                     "and 'type'."
                 )
             except IndexError as e:
@@ -162,8 +164,7 @@ class Annotation(object):
         """Create an Annotation from a dictionary.
 
         Args:
-            d (dict): The dictionary. Must contain,
-            tokens, mentions, relations.
+            d (dict): The dictionary. Must contain tokens, mentions, relations.
 
         Returns:
             Annotation: An Annotation.
@@ -189,14 +190,13 @@ class Annotation(object):
                 f"Sentence must contain at most {MAX_SENT_LENGTH} words."
             )
 
-        mention_key = "mentions"
-        if "mentions" not in d:
-            mention_key = "entities"
-            if "entities" not in d:
-                raise ValueError(
-                    "Could not parse document as it does not have "
-                    "a 'mentions' or an 'entities' key."
-                )
+        mention_key = "entities"
+
+        if mention_key not in d:
+            raise ValueError(
+                "Could not parse document as it does not have "
+                f"a {mention_key} key."
+            )
 
         try:
             annotation = Annotation(

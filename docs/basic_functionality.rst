@@ -17,56 +17,64 @@ Then you can use the `load_documents` function to load a list of documents from 
 
 .. code-block:: python
 
-   d.load_documents("sample_data/documents.csv", "sample_data/annotations.json")
+    d.load_documents(
+        sd_filename="sample_data/documents.csv",
+        anns_filename="sample_data/annotations.json",
+        anns_format="spert",
+    )
+
+Valid `anns_format` options are currently `quickgraph` and `spert`. Specifying a format is necessary because each of these formats differ slightly - for example, Quickgraph stores relationships differently, and uses a `label` key for its relations rather than `type`.
 
 Creating documents programatically
 ----------------------------------
 
 You can also create a dataset and populate it programatically. Here is an example of creating the same Dataset as above, but fully in Python.
 
+Note that your data will need to adhere to the format below. At this stage the ability to read either `quickgraph` or `spert` formats are limited to the `load_documents` function.
+
 .. code-block:: python
 
-   from puggle import Dataset, Document, Annotation
+    from puggle import Dataset, Document, Annotation
 
-   d = Dataset()
+    d = Dataset()
 
-   f1 = {"text": "one three two", "date": "12/05/2020", "x": "4", "y": "test"}
-   a1 = Annotation.from_dict(
-     {
-         "tokens": ["one", "three", "two"],
-         "mentions": [
-             {"start": 0, "end": 1, "labels": ["number"]},
-             {"start": 1, "end": 2, "labels": ["number"]},
-             {"start": 2, "end": 3, "labels": ["number"]},
-         ],
-         "relations": [
-             {"start": 1, "end": 0, "type": "bigger_than"},
-             {"start": 1, "end": 2, "type": "bigger_than"},
-         ],
-     }
-   )
+    f1 = {"text": "one three two", "date": "12/05/2020", "x": "4", "y": "test"}
+    a1 = Annotation.from_dict(
+        {
+            "tokens": ["one", "three", "two"],
+            "entities": [
+                {"start": 0, "end": 1, "labels": ["number"]},
+                {"start": 1, "end": 2, "labels": ["number"]},
+                {"start": 2, "end": 3, "labels": ["number"]},
+            ],
+            "relations": [
+                {"start": 1, "end": 0, "type": "bigger_than"},
+                {"start": 1, "end": 2, "type": "bigger_than"},
+            ],
+        }
+    )
 
-   doc1 = Document(f1, a1)
-   d.add_document(doc1)
+    doc1 = Document(f1, a1)
+    d.add_document(doc1)
 
-   f2 = {"text": "four six five", "date": "04/05/2020", "x": "12", "y": "another"}
-   a2 = Annotation.from_dict(
-     {
-         "tokens": ["four", "six", "five"],
-         "mentions": [
-             {"start": 0, "end": 1, "labels": ["number"]},
-             {"start": 1, "end": 2, "labels": ["number"]},
-             {"start": 2, "end": 3, "labels": ["number"]},
-         ],
-         "relations": [
-             {"start": 1, "end": 0, "type": "bigger_than"},
-             {"start": 1, "end": 2, "type": "bigger_than"},
-         ],
-     }
-   )
+    f2 = {"text": "four six five", "date": "04/05/2020", "x": "12", "y": "another"}
+    a2 = Annotation.from_dict(
+        {
+            "tokens": ["four", "six", "five"],
+            "entities": [
+                {"start": 0, "end": 1, "labels": ["number"]},
+                {"start": 1, "end": 2, "labels": ["number"]},
+                {"start": 2, "end": 3, "labels": ["number"]},
+            ],
+            "relations": [
+                {"start": 1, "end": 0, "type": "bigger_than"},
+                {"start": 1, "end": 2, "type": "bigger_than"},
+            ],
+        }
+    )
 
-   doc2 = Document(f2, a2)
-   d.add_document(doc2)
+    doc2 = Document(f2, a2)
+    d.add_document(doc2)
 
 Note that we call the `from_dict` function in the `Annotation` class to convert the dictionary into an Annotation object. We can then include the fields (dictionary) and this Annotation object as arguments to the constructor of the `Document` class, then add this newly-created `Document` object to our dataset.
 

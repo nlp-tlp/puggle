@@ -40,11 +40,19 @@ First, import puggle and create an empty `Dataset`:
 
 Then you can use the `load_documents` function to load a list of documents from a CSV file and a JSON file. Your structured data should be stored in the csv, and your annotations (e.g. the output of a machine learning model such as SPERT) should be stored in the JSON file.
 
-    d.load_documents("sample_data/documents.csv", "sample_data/annotations.json")
+    d.load_documents(
+        sd_filename="sample_data/documents.csv",
+        anns_filename="sample_data/annotations.json",
+        anns_format="spert",
+    )
+
+Valid `anns_format` options are currently `quickgraph` and `spert`. Specifying a format is necessary because each of these formats differ slightly - for example, Quickgraph stores relationships differently, and uses a `label` key for its relations rather than `type`.
 
 ### Creating documents programatically
 
 You can also create a dataset and populate it programatically. Here is an example of creating the same Dataset as above, but fully in Python.
+
+Note that your data will need to adhere to the format below. At this stage the ability to read either `quickgraph` or `spert` formats are limited to the `load_documents` function.
 
     from puggle import Dataset, Document, Annotation
 
@@ -54,7 +62,7 @@ You can also create a dataset and populate it programatically. Here is an exampl
     a1 = Annotation.from_dict(
         {
             "tokens": ["one", "three", "two"],
-            "mentions": [
+            "entities": [
                 {"start": 0, "end": 1, "labels": ["number"]},
                 {"start": 1, "end": 2, "labels": ["number"]},
                 {"start": 2, "end": 3, "labels": ["number"]},
@@ -73,7 +81,7 @@ You can also create a dataset and populate it programatically. Here is an exampl
     a2 = Annotation.from_dict(
         {
             "tokens": ["four", "six", "five"],
-            "mentions": [
+            "entities": [
                 {"start": 0, "end": 1, "labels": ["number"]},
                 {"start": 1, "end": 2, "labels": ["number"]},
                 {"start": 2, "end": 3, "labels": ["number"]},

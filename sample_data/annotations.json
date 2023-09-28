@@ -1,26 +1,26 @@
 [
     {
         "tokens": ["one", "three", "two"],
-        "mentions": [
-            { "start": 0, "end": 1, "labels": ["number"] },
-            { "start": 1, "end": 2, "labels": ["number"] },
-            { "start": 2, "end": 3, "labels": ["number"] }
+        "entities": [
+            { "start": 0, "end": 1, "type": "number" },
+            { "start": 1, "end": 2, "type": "number" },
+            { "start": 2, "end": 3, "type": "number" }
         ],
         "relations": [
-            { "start": 1, "end": 0, "type": "bigger_than" },
-            { "start": 1, "end": 2, "type": "bigger_than" }
+            { "head": 1, "tail": 0, "type": "bigger_than" },
+            { "head": 1, "tail": 2, "type": "bigger_than" }
         ]
     },
     {
         "tokens": ["four", "six", "five"],
-        "mentions": [
-            { "start": 0, "end": 1, "labels": ["number"] },
-            { "start": 1, "end": 2, "labels": ["number"] },
-            { "start": 2, "end": 3, "labels": ["number"] }
+        "entities": [
+            { "start": 0, "end": 1, "type": "number" },
+            { "start": 1, "end": 2, "type": "number" },
+            { "start": 2, "end": 3, "type": "number" }
         ],
         "relations": [
-            { "start": 1, "end": 0, "type": "bigger_than" },
-            { "start": 1, "end": 2, "type": "bigger_than" }
+            { "head": 1, "tail": 0, "type": "bigger_than" },
+            { "head": 1, "tail": 2, "type": "bigger_than" }
         ]
     }
 ]
