@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "puggle"
-version = "0.1.2"
+version = "0.1.3"
 description = ""
 authors = ["Michael Stewart <michael.stewart.webdev@gmail.com>"]
 readme = "README.md"

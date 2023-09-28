@@ -3,3 +3,4 @@ __pycache__/*
 .env
 venv/*
 docs/_build/*
+example_2.py

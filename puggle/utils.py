@@ -60,6 +60,7 @@ def _normalise_quickgraph(doc: Dict):
         m["labels"] = [m["label"]]
         del m["label"]
         entity_idxs[m["id"]] = i
+        m["end"] = m["end"] + 1
 
     for r in doc["relations"]:
         r["start"] = entity_idxs[r["source_id"]]
