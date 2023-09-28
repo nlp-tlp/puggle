@@ -6,7 +6,7 @@ authors = ["Michael Stewart <michael.stewart.webdev@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 colorama = "^0.4.6"
 py2neo = "^2021.2.3"
 python-dotenv = "^1.0.0"

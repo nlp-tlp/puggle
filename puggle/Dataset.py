@@ -63,12 +63,12 @@ class Dataset(object):
         structured data csv must correspond to row 3 of the annotations json.
 
         Args:
-            format (str): The format of the annotations file. Can be either
-               "quickgraph" or "spert".
             sd_filename (os.path, optional): The filepath of the structured
                data.
             anns_filename (os.path, optional): The filepath of the
                annotations.
+            anns_format (str): The format of the annotations file. Can be
+               either "quickgraph" or "spert".
         """
         if sd_filename is None and anns_filename is None:
             raise ValueError(
