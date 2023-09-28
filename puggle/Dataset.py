@@ -180,8 +180,8 @@ class Dataset(object):
                     f"MERGE (e2)-[:APPEARS_IN]->(d)"
                 )
                 graph.run(cypher)
-                if i > 0 and i % 10 == 0:
-                    print(f"Processed {i} documents")
+            if i > 0 and i % 10 == 0:
+                print(f"Processed {i} documents")
         print("Graph creation complete.")
 
     def create_neo4j_csvs():
@@ -254,10 +254,27 @@ class Dataset(object):
         with open(filename, "r") as f:
             try:
                 d = json.load(f)
-                for i, doc in enumerate(d):
-                    doc = normalise_annotation_format(doc, anns_format)
 
-                    annotations.append(Annotation.from_dict(doc))
+                # If using quickgraph format, combine all the annotations
+                # into one single list.
+                if anns_format == "quickgraph":
+                    if len(d.keys()) > 1:
+                        print(
+                            "Warning: you appear to be loading "
+                            "multiple annotators' annotations."
+                            "This may result in duplicate nodes - "
+                            "see the readme for more details."
+                        )
+                    anns = []
+                    for k, v in d.items():
+                        anns += v
+                else:
+                    anns = d
+
+                for i, ann in enumerate(anns):
+                    doc = normalise_annotation_format(ann, anns_format)
+
+                    annotations.append(Annotation.from_dict(ann))
 
             except (JSONDecodeError, ValueError) as e:
                 raise ValueError(

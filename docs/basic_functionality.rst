@@ -25,6 +25,10 @@ Then you can use the `load_documents` function to load a list of documents from 
 
 Valid `anns_format` options are currently `quickgraph` and `spert`. Specifying a format is necessary because each of these formats differ slightly - for example, Quickgraph stores relationships differently, and uses a `label` key for its relations rather than `type`.
 
+.. warning::
+
+    When importing annotations from Quickgraph, puggle will load the annotations of all annotators, which may result in duplicate nodes and edges. You may want to combine/compile them first before using Puggle, or only load in the annotations of one person.
+
 Creating documents programatically
 ----------------------------------
 
