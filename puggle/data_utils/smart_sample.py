@@ -22,6 +22,7 @@ def smart_sample(
     # 'sample sets'. The best of these will be chosen as the final output.
     sample_sets = []
     for sample_index in range(num_samples):
+        print(f"Running sample {sample_index}...")
         # Begin by selecting a random document.
         start_doc = random.choice(documents)
         sample_set = [start_doc]
@@ -57,14 +58,14 @@ def smart_sample(
 
     output_dataset = Dataset()
 
-    # Sort these sample sets, taking the one with the highest score as the
+    # Sort these sample sets, taking the one with the lowest score as the
     # final output dataset.
-    sample_sets.sort(key=lambda x: x[1], reverse=True)
+    sample_sets.sort(key=lambda x: x[1])
     print(f"Average scores of each of the {num_samples} sample sets:")
     for docs, score in sample_sets:
         print(score)
 
-    print("Creating final output dataset from the highest-scored sample...")
+    print("Creating final output dataset from the lowest-scored sample...")
     for d in sample_sets[0][0]:
         output_dataset.add_document(d)
 
@@ -87,6 +88,107 @@ def _calculate_document_score(document: Document, sample_set: list[Document]):
     relation_score = 0
 
     # Token score
+    # number of documents in which that token appears / number of documents
+    token_score = _get_token_score(document, sample_set)
+
+    # Entity score
+    # number of documents in which that entity appears / number of documents
+    entity_score = _get_entity_score(document, sample_set)
+
+    # Relation score
+    # number of documents in which that relation appears / number of documents
+    relation_score = _get_relation_score(document, sample_set)
+
+    return (token_score + entity_score + relation_score) / 3
+
+
+def _get_entity_score(document: Document, sample_set: list[Document]):
+    """Get the entity score.
+
+    Args:
+        document (Document): The document to get the score for.
+        sample_set (list[Document]): The other docs in the set.
+
+    Returns:
+        float: The entity score.
+    """
+
+    # If there are no mentions, this doc is not useful to sample,
+    # thus the score is set to the highest possible value of 1.
+    if len(document.annotation.mentions) == 0:
+        return 1.0
+
+    entity_scores = []
+    for m in document.annotation.mentions:
+        label = m.get_first_label()
+
+        freq = 0
+        for other_doc in sample_set:
+            for m in other_doc.annotation.mentions:
+                if label == m.get_first_label():
+                    freq += 1
+                    break
+        es = freq / len(sample_set)
+        entity_scores.append(es)
+    entity_score = (
+        sum(entity_scores) / len(entity_scores)
+        if len(entity_scores) > 0
+        else 0
+    )
+    return entity_score
+
+
+def _get_relation_score(document: Document, sample_set: list[Document]):
+    """Get the relation score.
+
+    Args:
+        document (Document): The document to get the score for.
+        sample_set (list[Document]): The other docs in the set.
+
+    Returns:
+        float: The relation score.
+    """
+
+    # If there are no relations, this doc is not useful to sample,
+    # thus the score is set to the highest possible value of 1.
+    if len(document.annotation.relations) == 0:
+        return 1.0
+
+    relation_scores = []
+    for r in document.annotation.relations:
+        label = r.label
+        freq = 0
+        for other_doc in sample_set:
+            for m in other_doc.annotation.relations:
+                if label == r.label:
+                    freq += 1
+                    break
+        rs = freq / len(sample_set)
+        relation_scores.append(rs)
+    relation_score = (
+        sum(relation_scores) / len(relation_scores)
+        if len(relation_scores) > 0
+        else 0
+    )
+    return relation_score
+
+
+def _get_token_score(document: Document, sample_set: list[Document]):
+    """Get the token score.
+
+    Args:
+        document (Document): The document to get the score for.
+        sample_set (list[Document]): The other docs in the set.
+
+    Returns:
+        float: The token score.
+    """
+
+    # If there are no tokens, this doc is not useful to sample,
+    # thus the score is set to the highest possible value of 1.
+    if len(document.annotation.tokens) == 0:
+        return 1.0
+
     token_scores = []
     for t in document.annotation.tokens:
         freq = 0
@@ -95,6 +197,7 @@ def _calculate_document_score(document: Document, sample_set: list[Document]):
                 freq += 1
         ts = freq / len(sample_set)
         token_scores.append(ts)
-    token_score = sum(token_scores) / len(token_scores)
-
-    return (token_score + entity_score + relation_score) / 3
+    token_score = (
+        sum(token_scores) / len(token_scores) if len(token_scores) > 0 else 0
+    )
+    return token_score
