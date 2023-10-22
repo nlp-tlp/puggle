@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 
 def validate_anns_format(anns_format: str):

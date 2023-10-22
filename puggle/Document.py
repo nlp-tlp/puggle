@@ -57,3 +57,6 @@ class Document(object):
             if self.annotation
             else None,
         }
+
+    def __str__(self):
+        return str(self.to_dict())

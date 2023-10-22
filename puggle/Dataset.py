@@ -5,13 +5,16 @@ import csv
 import random
 import logging as logger
 from json import JSONDecodeError
-from typing import List
+from typing import Dict, List
 from py2neo import Graph
 from dotenv import load_dotenv
 
 from .Document import Document
 from .Annotation import Annotation
-from .utils import validate_anns_format, normalise_annotation_format
+from .utils import (
+    validate_anns_format,
+    normalise_annotation_format,
+)
 
 load_dotenv()
 
@@ -31,14 +34,29 @@ class Dataset(object):
         super(Dataset, self).__init__()
         self.documents = []
 
-    def save_to_file(self, filename: str):
+    def save_to_file(self, filename: str, output_format: str = "json"):
         """Save the documents of this dataset to the given filename.
 
         Args:
             filename (str): The filename to save to.
+            output_format (str): The format to save to. 'json' will save as a
+               json file without any special formatting. 'quickgraph' will save
+               as a json file that can be loaded directly into quickgraph.
         """
-        with open(filename, "w") as f:
-            json.dump([doc.to_dict() for doc in self.documents], f)
+        if output_format not in ["json", "quickgraph"]:
+            raise ValueError(
+                "Output format must be either 'json' or 'quickgraph'"
+            )
+
+        if output_format == "json":
+            with open(filename, "w") as f:
+                json.dump(
+                    [doc.to_dict() for doc in self.documents], f, indent=2
+                )
+        elif output_format == "quickgraph":
+            quickgraph_docs = _to_quickgraph(self)
+            with open(filename, "w") as f:
+                json.dump([doc for doc in quickgraph_docs], f, indent=2)
 
     def add_document(self, document: Document):
         """Add the given Document to this Dataset.
@@ -291,3 +309,48 @@ class Dataset(object):
             str: String representation of the dataset.
         """
         return f"Dataset containing {len(self.documents)} documents."
+
+
+def _to_quickgraph(dataset: Dataset) -> List[Dict]:
+    """Convert the given Dataset to a list of dicts compatible with Quickgraph.
+
+    Args:
+        dataset (Dataset): The dataset to convert.
+
+    Returns:
+        List[Dict]: A list of Quickgraph-compatible data.
+    """
+    quickgraph_docs = []
+    for doc in dataset.documents:
+        ann = doc.annotation
+
+        entities = []
+        relations = []
+
+        for i, m in enumerate(ann.mentions):
+            entities.append(
+                {
+                    "id": str(i + 1),
+                    "start": m.start,
+                    "end": m.end - 1,
+                    "label": m.get_first_label(),
+                }
+            )
+
+        for i, r in enumerate(ann.relations):
+            relations.append(
+                {
+                    "source_id": str(r.start.mention_id + 1),
+                    "target_id": str(r.end.mention_id + 1),
+                    "label": r.label,
+                }
+            )
+
+        qd = {
+            "original": " ".join(ann.tokens),
+            "tokens": ann.tokens,
+            "entities": entities,
+            "relations": relations,
+        }
+        quickgraph_docs.append(qd)
+    return quickgraph_docs

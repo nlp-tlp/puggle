@@ -39,7 +39,7 @@ class Annotation(object):
         if relations:
             self.relations = self._parse_relations(relations)
         else:
-            self.relations = None
+            self.relations = []
 
     def to_dict(self):
         """Return a dictionary representation of this Annotation.
