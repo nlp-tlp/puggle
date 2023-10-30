@@ -15,6 +15,7 @@ from .utils import (
     validate_anns_format,
     normalise_annotation_format,
 )
+from .logger import logger
 
 load_dotenv()
 
@@ -199,8 +200,8 @@ class Dataset(object):
                 )
                 graph.run(cypher)
             if i > 0 and i % 10 == 0:
-                print(f"Processed {i} documents")
-        print("Graph creation complete.")
+                logger.debug(f"Processed {i} documents")
+        logger.info("Graph creation complete.")
 
     def create_neo4j_csvs():
         """A function to generate a set of CSVs to load into Neo4j via
@@ -277,7 +278,7 @@ class Dataset(object):
                 # into one single list.
                 if anns_format == "quickgraph":
                     if len(d.keys()) > 1:
-                        print(
+                        logger.warning(
                             "Warning: you appear to be loading "
                             "multiple annotators' annotations."
                             "This may result in duplicate nodes - "

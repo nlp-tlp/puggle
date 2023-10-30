@@ -35,7 +35,14 @@ class Mention(object):
         return first_label
 
     def to_dict(self):
-        return self.__dict__
+        """Return a dictionary representation of this mention.
+        Don't include the mention_id as it is not useful here - it is only
+        used when creating Relation objects between Mentions.
+
+        Returns:
+            dict: The mention as a dictionary.
+        """
+        return {k: v for k, v in self.__dict__.items() if k != "mention_id"}
 
     def __repr__(self):
         if len(self.labels) == 1:
