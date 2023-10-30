@@ -8,6 +8,7 @@ idna==3.3
 imagesize==1.4.1
 interchange==2021.0.4
 Jinja2==3.1.2
+loguru==0.7.2
 MarkupSafe==2.1.1
 monotonic==1.6
 packaging==21.3
@@ -29,3 +30,4 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
 urllib3==1.26.9
+win32-setctime==1.1.0

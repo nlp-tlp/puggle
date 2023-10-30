@@ -30,7 +30,7 @@ def get_entity_label_counts(self: Dataset, document_level=False):
            the total frequency of that entity label.
 
     Returns:
-        list[tuple]: A sorted list of (entity_label, freq) pairs
+        list[tuple]: A sorted list of (entity_label, freq) pairs.
     """
     counts_dict = {}
     counts = []

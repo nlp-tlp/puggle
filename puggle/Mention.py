@@ -13,6 +13,16 @@ class Mention(object):
         labels: list,
         mention_id: int,
     ):
+        """Create a new Mention.
+
+        Args:
+            start (int): The index of the first token of the mention.
+            end (int): The index of the last token of the mention.
+            tokens (list): The list of tokens appearing in the mention.
+            labels (list): The list of label(s) of the mention.
+            mention_id (int): The index of this mention with respect to the
+               Document in which it appears.
+        """
         super(Mention, self).__init__()
         self.start = start
         self.end = end

@@ -1,4 +1,18 @@
-"""A dataset that stores tokens and labels in ET format."""
+"""A Dataset that stores a list of Documents.
+
+.. code-block:: python
+
+    from puggle import Dataset
+    d = Dataset()
+
+    d.load_documents(
+        sd_filename="sample_data/documents.csv",
+        anns_filename="sample_data/annotations.json",
+        anns_format="spert",
+    )
+
+
+"""
 import os
 import json
 import csv
@@ -21,8 +35,9 @@ load_dotenv()
 
 
 class Dataset(object):
-    """A class representing a Dataset, which
-    stores Documents in the form of Mentions and Relations.
+    """A class representing a Dataset, which stores a list of Documents.
+
+    :var documents: A List of :class:`puggle.Document.Document` objects.
     """
 
     def __init__(self):
@@ -59,14 +74,7 @@ class Dataset(object):
             with open(filename, "w") as f:
                 json.dump([doc for doc in quickgraph_docs], f, indent=2)
 
-    def add_document(self, document: Document):
-        """Add the given Document to this Dataset.
-
-        Args:
-            document (Document): The Document to add.
-
-        """
-        self.documents.append(document)
+        logger.info(f"Saved dataset to {filename}.")
 
     def load_documents(
         self,
@@ -122,6 +130,7 @@ class Dataset(object):
             documents.append(d)
 
         self.documents = documents
+        logger.info(f"Successfully loaded {len(self.documents)} documents.")
 
     def load_into_neo4j(self, recreate=False):
         """Load the Dataset into a Neo4j database.
@@ -202,6 +211,15 @@ class Dataset(object):
             if i > 0 and i % 10 == 0:
                 logger.debug(f"Processed {i} documents")
         logger.info("Graph creation complete.")
+
+    def add_document(self, document: Document):
+        """Add the given Document to this Dataset.
+
+        Args:
+            document (Document): The Document to add.
+
+        """
+        self.documents.append(document)
 
     def create_neo4j_csvs():
         """A function to generate a set of CSVs to load into Neo4j via

@@ -1,9 +1,6 @@
 API Reference
 =============
 
-Submodules
-----------
-
 puggle.Dataset module
 ---------------------
 
@@ -19,6 +16,15 @@ puggle.Document module
    :members:
    :undoc-members:
    :show-inheritance:
+
+puggle.Annotation module
+------------------------
+
+.. automodule:: puggle.Annotation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 puggle.Mention module
 ---------------------
@@ -36,18 +42,4 @@ puggle.Relation module
    :undoc-members:
    :show-inheritance:
 
-puggle.size\_limits module
---------------------------
 
-.. automodule:: puggle.size_limits
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: puggle
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,3 +1,4 @@
+"""Functions for working with Datasets in Puggle."""
 from .sampling import (
     random_sample,
     smart_sample,

@@ -19,15 +19,22 @@ def drop_entity_class(self: Dataset, entity_class: str):
     for doc in dataset.documents:
         a = doc.annotation
 
-        a.mentions = list(
+        updated_mentions = list(
             filter(lambda m: m.get_first_label() != entity_class, a.mentions)
         )
-        a.relations = list(
+        n_removed_e += len(a.mentions) - len(updated_mentions)
+        a.mentions = updated_mentions
+
+        # Remove connected relations
+        updated_relations = list(
             filter(
                 lambda r: ((r.start in a.mentions) or (r.end in a.mentions)),
                 a.relations,
             )
         )
+        n_removed_r += len(a.relations) - len(updated_relations)
+        a.relations = updated_relations
+
     logger.info(
         f'Drop Entity class "{entity_class}": removed {n_removed_e} entities '
         f"and {n_removed_r} connected relations."
@@ -101,11 +108,31 @@ def flatten_all_entities(self: Dataset):
     base class, and remove all but the first label. For example,
     ["state/desirable"] becomes ["state"], etc.
     """
+    n_modified = 0
     for doc in self.documents:
         a = doc.annotation
         for m in a.mentions:
             m.labels = [m.get_first_label().split("/")[0]]
-    logger.info("Successfully flattened all entities in dataset.")
+        n_modified += len(a.mentions)
+    logger.info(
+        f"Successfully flattened all {n_modified} entities in dataset."
+    )
+
+
+def flatten_all_relations(self: Dataset):
+    """Flatten all relations, i.e. resolve all hierarchical relations to their
+    base class. For example,
+    ["state/desirable"] becomes ["state"], etc.
+    """
+    n_modified = 0
+    for doc in self.documents:
+        a = doc.annotation
+        for r in a.relations:
+            r.label = r.label.split("/")[0]
+        n_modified += len(a.relations)
+    logger.info(
+        f"Successfully flattened all {n_modified} relations in dataset."
+    )
 
 
 Dataset.drop_entity_class = drop_entity_class
@@ -113,3 +140,4 @@ Dataset.drop_relation_class = drop_relation_class
 Dataset.convert_entity_class = convert_entity_class
 Dataset.convert_relation_class = convert_relation_class
 Dataset.flatten_all_entities = flatten_all_entities
+Dataset.flatten_all_relations = flatten_all_relations

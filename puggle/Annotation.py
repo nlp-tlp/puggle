@@ -1,4 +1,4 @@
-"""A class that stores documents in Mention format."""
+"""A class that stores a single annotation on a Document."""
 
 from typing import List, Dict
 
@@ -13,13 +13,19 @@ import logging as logger
 class Annotation(object):
     """An Annotation for the textual portion of a Document.
     Contains a list of tokens, a list of mentions,
-    a list of relations."""
+    a list of relations.
+
+    :var tokens: A list of tokens (strings).
+    :var mentions: A list of :class:`puggle.Mention.Mention` objects.
+    :var relations: A list of :class:`puggle.Relation.Relation` objects.
+
+    """
 
     def __init__(
         self,
-        tokens: list,
-        mentions: list,
-        relations: list = None,
+        tokens: list[str],
+        mentions: list[Dict],
+        relations: list[Dict] = None,
     ):
         """Create a new Annotation.
 
@@ -27,10 +33,10 @@ class Annotation(object):
             tokens (list): The list of tokens of the document.
             mentions (list): The list of mentions of the document. Each
                mention must follow the correct format ('start', 'end',
-               'mentions'/'entities', 'labels'/'type').
+               'labels').
             relations (list, optional): The list of relations of the
                document. Each relation must follow the correct format
-               ('start'/'head', 'end'/'tail', 'type').
+               ('start', 'end', 'type').
         """
         super(Annotation, self).__init__()
         self.tokens = tokens
@@ -96,9 +102,8 @@ class Annotation(object):
             except KeyError as e:
                 logger.error(
                     f"Could not parse document due to "
-                    "missing keys. The 'entities/mentions' key of each "
-                    "document must have 'start', 'end', 'tokens', "
-                    "and either 'labels' or 'type'."
+                    "missing keys. The 'mentions' must have 'start', 'end', "
+                    "and 'labels'."
                 )
 
             if str(m_obj) not in seen_mentions:

@@ -1,5 +1,7 @@
+"""Functions for generating samples from Puggle Datasets."""
 import random
 from puggle import Dataset, Annotation, Document
+from puggle.logger import logger
 
 
 def random_sample(self: Dataset, num_records: int) -> Dataset:
@@ -7,7 +9,7 @@ def random_sample(self: Dataset, num_records: int) -> Dataset:
     Dataset with num_records documents.
 
     Args:
-        dataset (Dataset): The dataset to sample.
+        self (Dataset): The dataset to sample.
         num_records (int): The number of documents that should appear in the
            output.
     """
@@ -23,12 +25,16 @@ def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     num_records documents.
     Repeat the sampling process num_samples times and select the best
     example.
+    The algorithm aims to maximise the number of different tokens, entity
+    classes and relation classes in the sample.
 
     Args:
-        dataset (Dataset): The dataset to sample.
+        self (Dataset): The dataset to sample.
         num_records (int): The number of documents that should appear in the
            output.
-        num_samples (int): Number of times to repeat the process.
+        num_samples (int): Number of times to repeat the process. The idea is
+           that the more samples are run, the more likely it is that the
+           function will generate a better quality sample.
     """
     dataset = self
     documents = dataset.documents
@@ -37,7 +43,7 @@ def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     # 'sample sets'. The best of these will be chosen as the final output.
     sample_sets = []
     for sample_index in range(num_samples):
-        print(f"Running sample {sample_index}...")
+        logger.info(f"Running sample {sample_index}...")
         # Begin by selecting a random document.
         start_doc = random.choice(documents)
         sample_set = [start_doc]
@@ -79,11 +85,13 @@ def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     # Sort these sample sets, taking the one with the lowest score as the
     # final output dataset.
     scored_sets.sort(key=lambda x: x[1], reverse=True)
-    print(f"Average scores of each of the {num_samples} sample sets:")
+    logger.debug(f"Average scores of each of the {num_samples} sample sets:")
     for docs, score in scored_sets:
-        print(score)
+        logger.debug(score)
 
-    print("Creating final output dataset from the lowest-scored sample...")
+    logger.debug(
+        "Creating final output dataset from the lowest-scored sample..."
+    )
     for d in scored_sets[0][0]:
         output_dataset.add_document(d)
 
