@@ -102,6 +102,104 @@ You can then open up the Neo4j browser and write queries over your documents/ent
 .. image:: ../graph.png
    :alt: An image of the graph.
 
+Saving data
+-----------
+
+The :class:`~puggle.Dataset.Dataset`'s :func:`~puggle.Dataset.Dataset.save_to_file` function allows you to save your dataset to one of two formats: `json` or `quickgraph`.
+
+The `json` format simply dumps each document into a JSON object. An example of one document from the `json` output format is as follows:
+
+.. code-block:: json
+
+    {
+        "fields": null,
+        "annotations": {
+          "tokens": [
+            "<id>",
+            "air",
+            "freight",
+            "for",
+            "pump",
+            "TBC"
+          ],
+          "mentions": [
+            {
+              "start": 4,
+              "end": 5,
+              "tokens": [
+                "pump"
+              ],
+              "labels": [
+                "PhysicalObject"
+              ]
+            },
+            {
+              "start": 1,
+              "end": 3,
+              "tokens": [
+                "air",
+                "freight"
+              ],
+              "labels": [
+                "Activity"
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "start": 1,
+              "end": 0,
+              "type": "hasParticipant"
+            }
+          ]
+        }
+    }
+
+The `quickgraph` output can be fed directly into QuickGraph to use for
+creating a preannotated project (see `here <https://docs.quickgraph.tech/advanced-tutorials/adv-tutorial-1-preannotated-project/>`_. An example output of that same document with the `quickgraph` format is as follows:
+
+.. code-block:: json
+
+    {
+        "original": "<id> air freight for pump TBC",
+        "tokens": [
+          "<id>",
+          "air",
+          "freight",
+          "for",
+          "pump",
+          "TBC"
+        ],
+        "entities": [
+          {
+            "id": "1",
+            "start": 4,
+            "end": 4,
+            "label": "PhysicalObject"
+          },
+          {
+            "id": "2",
+            "start": 1,
+            "end": 2,
+            "label": "Activity"
+          }
+        ],
+        "relations": [
+          {
+            "source_id": "2",
+            "target_id": "1",
+            "label": "hasParticipant"
+          }
+        ]
+    }
+
+Note that the `end` indexes in the `quickgraph` output are 1 higher than that of the `json` output - this is by design (QuickGraph's `end` indexes are the index of the last word in the mention).
+
+An example of using the :func:`~puggle.Dataset.Dataset.save_to_file` is as follows:
+
+.. code-block:: python
+
+    d.save_to_file('output.json', 'quickgraph')
 
 Manipulating a Dataset
 ----------------------
