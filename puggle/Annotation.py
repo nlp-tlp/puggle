@@ -1,4 +1,4 @@
-"""A class that stores a single annotation on a Document."""
+"""A class that stores the annotations of a Document."""
 
 from typing import List, Dict
 

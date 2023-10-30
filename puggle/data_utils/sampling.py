@@ -5,7 +5,9 @@ from puggle.logger import logger
 
 
 def random_sample(self: Dataset, num_records: int) -> Dataset:
-    """Run a 'random sample' over the given dataset to return a new
+    """
+    :bdg-primary-line:`sampling`
+    Run a 'random sample' over the given dataset to return a new
     Dataset with num_records documents.
 
     Args:
@@ -21,7 +23,14 @@ def random_sample(self: Dataset, num_records: int) -> Dataset:
 
 
 def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
-    """Run a 'smart sample' on the given dataset to return a new Dataset with
+    """
+    :bdg-primary-line:`sampling`
+
+    .. warning::
+
+        This function is experimental - it works, but hasn't been tested.
+
+    Run a 'smart sample' on the given dataset to return a new Dataset with
     num_records documents.
     Repeat the sampling process num_samples times and select the best
     example.
@@ -29,7 +38,6 @@ def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     classes and relation classes in the sample.
 
     Args:
-        self (Dataset): The dataset to sample.
         num_records (int): The number of documents that should appear in the
            output.
         num_samples (int): Number of times to repeat the process. The idea is

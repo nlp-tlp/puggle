@@ -1,17 +1,4 @@
 """A Dataset that stores a list of Documents.
-
-.. code-block:: python
-
-    from puggle import Dataset
-    d = Dataset()
-
-    d.load_documents(
-        sd_filename="sample_data/documents.csv",
-        anns_filename="sample_data/annotations.json",
-        anns_format="spert",
-    )
-
-
 """
 import os
 import json
@@ -41,40 +28,11 @@ class Dataset(object):
     """
 
     def __init__(self):
-        """Load a Dataset from a file path. The file must be .json.
-
-
-        Args:
-            filepath (os.path): The file path to load the dataset from.
+        """Create an empty Dataset. Documents may be loaded via the
+        :func:`puggle.Dataset.Dataset.load_documents` function.
         """
         super(Dataset, self).__init__()
         self.documents = []
-
-    def save_to_file(self, filename: str, output_format: str = "json"):
-        """Save the documents of this dataset to the given filename.
-
-        Args:
-            filename (str): The filename to save to.
-            output_format (str): The format to save to. 'json' will save as a
-               json file without any special formatting. 'quickgraph' will save
-               as a json file that can be loaded directly into quickgraph.
-        """
-        if output_format not in ["json", "quickgraph"]:
-            raise ValueError(
-                "Output format must be either 'json' or 'quickgraph'"
-            )
-
-        if output_format == "json":
-            with open(filename, "w") as f:
-                json.dump(
-                    [doc.to_dict() for doc in self.documents], f, indent=2
-                )
-        elif output_format == "quickgraph":
-            quickgraph_docs = _to_quickgraph(self)
-            with open(filename, "w") as f:
-                json.dump([doc for doc in quickgraph_docs], f, indent=2)
-
-        logger.info(f"Saved dataset to {filename}.")
 
     def load_documents(
         self,
@@ -131,6 +89,126 @@ class Dataset(object):
 
         self.documents = documents
         logger.info(f"Successfully loaded {len(self.documents)} documents.")
+
+    def save_to_file(self, filename: str, output_format: str = "json"):
+        """Save the documents of this dataset to the given filename.
+
+        There are two `output_format` options to choose from: `json`
+        and `quickgraph`.
+
+        The `json` format simply dumps each doc into a JSON object. An example
+        of one document from the `json` output format is as follows:
+
+        .. code-block:: json
+
+            {
+                "fields": null,
+                "annotations": {
+                  "tokens": [
+                    "<id>",
+                    "air",
+                    "freight",
+                    "for",
+                    "pump",
+                    "TBC"
+                  ],
+                  "mentions": [
+                    {
+                      "start": 4,
+                      "end": 5,
+                      "tokens": [
+                        "pump"
+                      ],
+                      "labels": [
+                        "PhysicalObject"
+                      ]
+                    },
+                    {
+                      "start": 1,
+                      "end": 3,
+                      "tokens": [
+                        "air",
+                        "freight"
+                      ],
+                      "labels": [
+                        "Activity"
+                      ]
+                    }
+                  ],
+                  "relations": [
+                    {
+                      "start": 1,
+                      "end": 0,
+                      "type": "hasParticipant"
+                    }
+                  ]
+                }
+            }
+
+        An example output of that same document with the `quickgraph` format
+        is as follows:
+
+        .. code-block:: json
+
+            {
+                "original": "<id> air freight for pump TBC",
+                "tokens": [
+                  "<id>",
+                  "air",
+                  "freight",
+                  "for",
+                  "pump",
+                  "TBC"
+                ],
+                "entities": [
+                  {
+                    "id": "1",
+                    "start": 4,
+                    "end": 4,
+                    "label": "PhysicalObject"
+                  },
+                  {
+                    "id": "2",
+                    "start": 1,
+                    "end": 2,
+                    "label": "Activity"
+                  }
+                ],
+                "relations": [
+                  {
+                    "source_id": "2",
+                    "target_id": "1",
+                    "label": "hasParticipant"
+                  }
+                ]
+            }
+
+        Note that the `end` indexes in the `quickgraph` output are 1 higher
+        than that of the `json` output - this is by design (QuickGraph's `end`
+        indexes are the index of the last word in the mention).
+
+        Args:
+            filename (str): The filename to save to.
+            output_format (str): The format to save to. 'json' will save as a
+               json file without any special formatting. 'quickgraph' will save
+               as a json file that can be loaded directly into quickgraph.
+        """
+        if output_format not in ["json", "quickgraph"]:
+            raise ValueError(
+                "Output format must be either 'json' or 'quickgraph'"
+            )
+
+        if output_format == "json":
+            with open(filename, "w") as f:
+                json.dump(
+                    [doc.to_dict() for doc in self.documents], f, indent=2
+                )
+        elif output_format == "quickgraph":
+            quickgraph_docs = _to_quickgraph(self)
+            with open(filename, "w") as f:
+                json.dump([doc for doc in quickgraph_docs], f, indent=2)
+
+        logger.info(f"Saved dataset to {filename}.")
 
     def load_into_neo4j(self, recreate=False):
         """Load the Dataset into a Neo4j database.

@@ -5,12 +5,13 @@ from puggle.logger import logger
 
 
 def drop_entity_class(self: Dataset, entity_class: str):
-    """Remove any instances of the given entity class from the mentions of the
-    given Dataset.
+    """
+    :bdg-success-line:`Manipulation`
+    Remove any instances of the given entity class from the mentions of this
+    Dataset.
     Also remove all Relations referencing the deleted mentions.
 
     Args:
-        dataset (Dataset): The dataset to manipulate.
         entity_class (str): The entity class to remove.
     """
     dataset = self
@@ -42,11 +43,12 @@ def drop_entity_class(self: Dataset, entity_class: str):
 
 
 def drop_relation_class(self: Dataset, relation_class: str):
-    """Remove any instances of the given relation class from the relations of
-    the given Dataset.
+    """
+    :bdg-success-line:`Manipulation`
+    Remove any instances of the given relation class from the relations of
+    this Dataset.
 
     Args:
-        dataset (Dataset): The dataset to manipulate.
         relation_class (str): The relation class to remove.
     """
     dataset = self
@@ -64,7 +66,10 @@ def drop_relation_class(self: Dataset, relation_class: str):
 
 
 def convert_entity_class(self: Dataset, original_ec: str, modified_ec: str):
-    """Convert the given entity class from one label to another.
+    """
+    :bdg-success-line:`Manipulation`
+    Convert the given entity class from one label to another across the
+    entire Dataset.
 
     Args:
         original_ec (str): The entity class to change.
@@ -84,7 +89,10 @@ def convert_entity_class(self: Dataset, original_ec: str, modified_ec: str):
 
 
 def convert_relation_class(self: Dataset, original_rc: str, modified_rc: str):
-    """Convert the given relation class from one label to another.
+    """
+    :bdg-success-line:`Manipulation`
+    Convert the given relation class from one label to another across the
+    entire Dataset.
 
     Args:
         original_ec (str): The relation class to change.
@@ -104,7 +112,9 @@ def convert_relation_class(self: Dataset, original_rc: str, modified_rc: str):
 
 
 def flatten_all_entities(self: Dataset):
-    """Flatten all entities, i.e. resolve all hierarchical entities to their
+    """
+    :bdg-success-line:`Manipulation`
+    Flatten all entities, i.e. resolve all hierarchical entities to their
     base class, and remove all but the first label. For example,
     ["state/desirable"] becomes ["state"], etc.
     """
@@ -120,7 +130,9 @@ def flatten_all_entities(self: Dataset):
 
 
 def flatten_all_relations(self: Dataset):
-    """Flatten all relations, i.e. resolve all hierarchical relations to their
+    """
+    :bdg-success-line:`Manipulation`
+    Flatten all relations, i.e. resolve all hierarchical relations to their
     base class. For example,
     ["state/desirable"] becomes ["state"], etc.
     """

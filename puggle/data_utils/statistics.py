@@ -1,8 +1,10 @@
 from puggle import Dataset
 
 
-def count_unique_tokens(self: Dataset):
-    """Return the number of unique tokens in the given Dataset.
+def get_unique_tokens_count(self: Dataset):
+    """
+    :bdg-danger-line:`Statistics`
+    Return the number of unique tokens in this Dataset.
 
     Args:
         dataset (Dataset): The dataset to use.
@@ -20,7 +22,9 @@ def count_unique_tokens(self: Dataset):
 
 
 def get_entity_label_counts(self: Dataset, document_level=False):
-    """Return a sorted list of (entity_label, freq) pairs.
+    """
+    :bdg-danger-line:`Statistics`
+    Return a sorted list of (entity_label, freq) pairs in this Dataset.
     The frequency is the number of times that entity_label has been used.
 
     Args:
@@ -49,5 +53,5 @@ def get_entity_label_counts(self: Dataset, document_level=False):
     return sorted_counts
 
 
-Dataset.count_unique_tokens = count_unique_tokens
+Dataset.get_unique_tokens_count = get_unique_tokens_count
 Dataset.get_entity_label_counts = get_entity_label_counts
