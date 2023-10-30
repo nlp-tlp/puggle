@@ -1,6 +1,6 @@
 # Puggle
 
-<p align="center">**:book: Full README and code documentation available on [ReadtheDocs](https://puggle.readthedocs.io/en/latest/). :book:**</p>
+<p align="center">:book: <strong>Full README and code documentation available on <a href="https://puggle.readthedocs.io/en/latest/">ReadtheDocs</a>.</strong> :book:</p>
 
 This library is designed to provide utilities for working with the outputs of entity typing models such as [SPERT](https://github.com/lavis-nlp/spert/), [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing), or annotation tools such as [Quickgraph](https://quickgraph.tech/). Puggle has three main purposes:
 
