@@ -16,6 +16,15 @@ def validate_anns_format(anns_format: str):
 
 
 def normalise_annotation_format(doc: Dict, anns_format: str):
+    """Normalise the given document (as a dict) into a uniform format.
+
+    Args:
+        doc (Dict): The document to normalise.
+        anns_format (str): The annotation format.
+
+    Returns:
+        Dict: The normalised document.
+    """
     validate_anns_format(anns_format)
 
     if anns_format == "quickgraph":
