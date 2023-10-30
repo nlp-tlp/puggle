@@ -2,7 +2,7 @@ import random
 from puggle import Dataset, Annotation, Document
 
 
-def random_sample(dataset: Dataset, num_records: int) -> Dataset:
+def random_sample(self: Dataset, num_records: int) -> Dataset:
     """Run a 'random sample' over the given dataset to return a new
     Dataset with num_records documents.
 
@@ -12,15 +12,13 @@ def random_sample(dataset: Dataset, num_records: int) -> Dataset:
            output.
     """
     output_dataset = Dataset()
-    sample = random.sample(dataset.documents, num_records)
+    sample = random.sample(self.documents, num_records)
     for doc in sample:
         output_dataset.add_document(doc)
     return output_dataset
 
 
-def smart_sample(
-    dataset: Dataset, num_records: int, num_samples: int
-) -> Dataset:
+def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     """Run a 'smart sample' on the given dataset to return a new Dataset with
     num_records documents.
     Repeat the sampling process num_samples times and select the best
@@ -32,6 +30,7 @@ def smart_sample(
            output.
         num_samples (int): Number of times to repeat the process.
     """
+    dataset = self
     documents = dataset.documents
 
     # Repeat num_samples times to create a list of num_samples different
@@ -72,7 +71,9 @@ def smart_sample(
     # The average score determines how 'good' our sample set is.
     scored_sets = []
     for sample_set in sample_sets:
-        average_score = calculate_sample_quality(sample_set, dataset.documents)
+        average_score = _calculate_sample_quality(
+            sample_set, dataset.documents
+        )
         scored_sets.append((sample_set, average_score))
 
     # Sort these sample sets, taking the one with the lowest score as the
@@ -89,7 +90,7 @@ def smart_sample(
     return output_dataset
 
 
-def calculate_sample_quality(
+def _calculate_sample_quality(
     sample_dataset: list[Document], full_dataset: list[Document]
 ):
     """Calculate the 'similarity' of the given list of Documents using the
@@ -239,3 +240,7 @@ def _get_relation_score(document: Document, sample_set: list[Document]):
         else 0
     )
     return 1 - relation_score
+
+
+Dataset.random_sample = random_sample
+Dataset.smart_sample = smart_sample
