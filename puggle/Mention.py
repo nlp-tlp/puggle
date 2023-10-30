@@ -1,4 +1,5 @@
-""" A mention, which is used in the Redcoat documents."""
+""" A mention, which is stored by the :class:`~puggle.Annotation.Annotation`
+class."""
 
 
 class Mention(object):

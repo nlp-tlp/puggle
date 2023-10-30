@@ -145,8 +145,9 @@ class Dataset(object):
                 }
             }
 
-        An example output of that same document with the `quickgraph` format
-        is as follows:
+        The `quickgraph` output can be fed directly into QuickGraph to use for
+        creating a preannotated project. An example output of that same
+        document with the `quickgraph` format is as follows:
 
         .. code-block:: json
 
