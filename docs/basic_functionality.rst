@@ -108,10 +108,10 @@ Manipulating a Dataset
 
 Puggle also contains functions for manipulating a dataset, for example:
 
- * :func:`~puggle.Dataset.Dataset.drop_entity_class` removes all instances of the given entity class from a dataset (and all relations connected to it).
- * :func:`~puggle.Dataset.Dataset.drop_relation_class` removes all instances of the given relation class from a dataset.
- * :func:`~puggle.Dataset.Dataset.convert_entity_class` converts all entities with the given class to another class.
- * :func:`~puggle.Dataset.Dataset.convert_relation_class` converts all relations with the given class to another class.
+* :func:`~puggle.Dataset.Dataset.drop_entity_class` removes all instances of the given entity class from a dataset (and all relations connected to it).
+* :func:`~puggle.Dataset.Dataset.drop_relation_class` removes all instances of the given relation class from a dataset.
+* :func:`~puggle.Dataset.Dataset.convert_entity_class` converts all entities with the given class to another class.
+* :func:`~puggle.Dataset.Dataset.convert_relation_class` converts all relations with the given class to another class.
 
 For more info, see the :doc:`puggle`.
 
@@ -120,8 +120,8 @@ Statistical functions
 
 There are a few statistical functions:
 
- * :func:`~puggle.Dataset.Dataset.get_unique_tokens_count` returns the number of unique tokens in the dataset.
- * :func:`~puggle.Dataset.Dataset.get_entity_label_counts` returns a sorted list of (entity class, frequency) pairs appearing in the dataset.
+* :func:`~puggle.Dataset.Dataset.get_unique_tokens_count` returns the number of unique tokens in the dataset.
+* :func:`~puggle.Dataset.Dataset.get_entity_label_counts` returns a sorted list of (entity class, frequency) pairs appearing in the dataset.
 
 For more info, see the :doc:`puggle`.
 
@@ -130,7 +130,7 @@ Sampling
 
 We have also provided some functions for generating a sample from a dataset. This can be used for things such as creating a "test set" with which to validate a model. At the moment there are two functions:
 
- * :func:`~puggle.Dataset.Dataset.random_sample` returns a random sample of the dataset with the given number of documents.
- * :func:`~puggle.Dataset.Dataset.smart_sample` attempts to generate a sample of the dataset that maximises the number of unique tokens, entity classes, and relation classes. This function is still experimental at this stage.
+* :func:`~puggle.Dataset.Dataset.random_sample` returns a random sample of the dataset with the given number of documents.
+* :func:`~puggle.Dataset.Dataset.smart_sample` attempts to generate a sample of the dataset that maximises the number of unique tokens, entity classes, and relation classes. This function is still experimental at this stage.
 
 For more info, see the :doc:`puggle`.
