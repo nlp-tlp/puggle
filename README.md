@@ -1,6 +1,6 @@
 # Puggle
 
-![Test coverage](./coverage.svg)
+[![Coverage Status](https://coveralls.io/repos/github/nlp-tlp/puggle/badge.svg?branch=data_utils)](https://coveralls.io/github/nlp-tlp/puggle?branch=data_utils)
 
 This library is designed to provide utilities for working with the outputs of entity typing models such as [SPERT](https://github.com/lavis-nlp/spert/), [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing), or annotation tools such as [Quickgraph](https://quickgraph.tech/). Puggle has three main purposes:
 
