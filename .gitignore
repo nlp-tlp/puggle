@@ -9,3 +9,4 @@ data-out-random.json
 data-out-smart.json
 data-out-manip.json
 htmlcov/*
+coverage.svg
