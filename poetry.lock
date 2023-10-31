@@ -214,13 +214,13 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "py2neo"
-version = "2021.2.3"
+version = "2021.2.4"
 description = "Python client library and toolkit for Neo4j"
 optional = false
 python-versions = "*"
 files = [
-    {file = "py2neo-2021.2.3-py2.py3-none-any.whl", hash = "sha256:39c55614acdc00cbd4b2c9a43a2c7d1af81b92684da390f5501d844162a52173"},
-    {file = "py2neo-2021.2.3.tar.gz", hash = "sha256:92bed6c03ed9c1068085c18e1f5af9313ddb25e9e441525cd856839a34c1e31a"},
+    {file = "py2neo-2021.2.4-py2.py3-none-any.whl", hash = "sha256:2ddbe818354a6fa16d47dfd0fe5cb0287fa42ff109e87aa7b3e43636060d85a1"},
+    {file = "py2neo-2021.2.4.tar.gz", hash = "sha256:4b2737fcd9fd8d82b57e856de4eda005281c9cf0741c989e5252678f0503f77e"},
 ]
 
 [package.dependencies]
@@ -417,4 +417,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f485a912438c38ef89bf0adceb11f30155e31c3e7ef9091069f983a9b2a25a3c"
+content-hash = "6f907cd7b04e88948c7676d909da67097c4b05eb0e869ffc892fdb570fc426e7"
