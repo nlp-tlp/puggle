@@ -1,0 +1,35 @@
+name: "Run tests"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - data_utils
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  run-tests:
+    runs-on: "ubuntu-latest"
+    steps:
+      # The `uses` key tells the job to retrieve the action named `actions/checkout`. This is an action that checks out your repository and downloads it to the runner, allowing you to run actions against your code (such as testing tools). You must use the checkout action any time your workflow will use the repository's code or you are using an action defined in the repository.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # This step uses the `actions/setup-node` action to install the specified version of the Node.js software package on the runner, which gives you access to the `npm` command.
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Poetry dependencies
+        run: poetry install --with test
