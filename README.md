@@ -1,5 +1,7 @@
 # Puggle
 
+![Test coverage](./coverage.svg)
+
 This library is designed to provide utilities for working with the outputs of entity typing models such as [SPERT](https://github.com/lavis-nlp/spert/), [E2EET](https://github.com/Michael-Stewart-Webdev/e2e-entity-typing), or annotation tools such as [Quickgraph](https://quickgraph.tech/). Puggle has three main purposes:
 
 -   Provide easy parsing of the output (i.e. annotations) of entity typing models
