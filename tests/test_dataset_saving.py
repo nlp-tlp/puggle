@@ -15,9 +15,7 @@ from .test_dataset import dataset, dataset_path
     ],
     indirect=["dataset", "dataset_path"],
 )
-def test_dataset_saving_quickgraph(
-    dataset, output_format, dataset_path, tmp_path
-):
+def test_dataset_saving(dataset, output_format, dataset_path, tmp_path):
     out_path = tmp_path / "out.json"
     dataset.save_to_file(out_path, output_format=output_format)
 
