@@ -96,9 +96,9 @@ When loading documents in Puggle programatically in Python, the format for the a
     d = {
         "tokens": ["one", "three", "two"],
         "mentions": [
-            { "start": 0, "end": 1, "labels": ["number"] },
-            { "start": 1, "end": 2, "labels": ["number"] },
-            { "start": 2, "end": 3, "labels": ["number"] }
+            { "start": 0, "end": 1, "label": "number" },
+            { "start": 1, "end": 2, "label": "number" },
+            { "start": 2, "end": 3, "label": "number" }
         ],
         "relations": [
             { "start": 1, "end": 0, "type": "bigger_than" },
@@ -106,7 +106,7 @@ When loading documents in Puggle programatically in Python, the format for the a
         ]
     }
 
-This can be seen as a middleground between SPERT and QuickGraph. It notably models entity labels as a list, rather than a single string, meaning it can store multiple labels per entity.
+This can be seen as a middleground between SPERT and QuickGraph.
 
 Using Structured fields and Annotations together
 ------------------------------------------------

@@ -42,6 +42,11 @@ def _normalise_spert(doc: Dict):
     Returns:
         Dict: The parsed document.
     """
+    if "entities" not in doc:
+        doc["entities"] = []
+    if "relations" not in doc:
+        doc["relations"] = []
+
     for i, m in enumerate(doc["entities"]):
         m["label"] = m["type"]
         del m["type"]
@@ -64,6 +69,11 @@ def _normalise_quickgraph(doc: Dict):
     Returns:
         Dict: The parsed document.
     """
+    if "entities" not in doc:
+        doc["entities"] = []
+    if "relations" not in doc:
+        doc["relations"] = []
+
     entity_idxs = {}
     for i, m in enumerate(doc["entities"]):
         m["label"] = m["label"]

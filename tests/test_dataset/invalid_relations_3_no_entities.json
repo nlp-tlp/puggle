@@ -1,0 +1,9 @@
+[
+    {
+        "tokens": ["one", "three", "two"],
+        "relations": [
+            { "head": 1, "tail": 0, "type": "bigger_than" },
+            { "head": 3, "tail": 1, "type": "bigger_than" }
+        ]
+    }
+]

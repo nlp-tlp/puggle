@@ -163,6 +163,12 @@ class Annotation(object):
             key.
         """
 
+        # If any required keys are missing, raise an error.
+        if "tokens" not in d or "entities" not in d or "relations" not in d:
+            raise ValueError(
+                "Dictionary must contain tokens, entities, and relations."
+            )
+
         # Validate things such as max word length, sent length, etc,
         # before attempting to create Annotation object
         if any(len(t) > MAX_WORD_LENGTH for t in d["tokens"]):
@@ -179,17 +185,9 @@ class Annotation(object):
                 f"Sentence must contain at most {MAX_SENT_LENGTH} words."
             )
 
-        mention_key = "entities"
-
-        if "tokens" not in d or mention_key not in d or "relations" not in d:
-            raise ValueError(
-                "Dictionary must contain tokens, entities, and relations."
-                + str(e)
-            )
-
         annotation = Annotation(
             tokens=d["tokens"],
-            mentions=d[mention_key],
+            mentions=d["entities"],
             relations=d["relations"],
         )
 

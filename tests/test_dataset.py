@@ -17,6 +17,12 @@ def dataset_after(request):
     return _get_dataset(request)
 
 
+@pytest.fixture
+def dataset_path(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}.json")
+
+
 def _get_dataset(request):
     name = request.param
     if name == "empty":

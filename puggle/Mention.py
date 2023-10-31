@@ -25,6 +25,10 @@ class Mention(object):
                Document in which it appears.
         """
         super(Mention, self).__init__()
+        if start == end:
+            raise ValueError(
+                "Mention start index cannot be the same as its end index."
+            )
         self.start = start
         self.end = end
         self.tokens = tokens
