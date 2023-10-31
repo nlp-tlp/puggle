@@ -283,16 +283,20 @@ class Dataset(object):
                 # If using quickgraph format, combine all the annotations
                 # into one single list.
                 if anns_format == "quickgraph":
-                    if len(d.keys()) > 1:
-                        logger.warning(
-                            "Warning: you appear to be loading "
-                            "multiple annotators' annotations."
-                            "This may result in duplicate nodes - "
-                            "see the readme for more details."
-                        )
                     anns = []
-                    for k, v in d.items():
-                        anns += v
+                    if isinstance(d, list):
+                        anns = d
+                    else:
+                        if len(d.keys()) > 1:
+                            logger.warning(
+                                "Warning: you appear to be loading "
+                                "multiple annotators' annotations."
+                                "This may result in duplicate nodes - "
+                                "see the readme for more details."
+                            )
+                        anns = []
+                        for k, v in d.items():
+                            anns += v
                 else:
                     anns = d
 

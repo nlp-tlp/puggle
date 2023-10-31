@@ -23,6 +23,18 @@ def dataset_path(request):
     return os.path.join(FIXTURE_DIR, f"{name}.json")
 
 
+@pytest.fixture
+def dataset_csv_path(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}.csv")
+
+
+@pytest.fixture
+def dataset_full_path(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}")
+
+
 def _get_dataset(request):
     name = request.param
     if name == "empty":

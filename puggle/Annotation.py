@@ -57,9 +57,7 @@ class Annotation(object):
         return {
             "tokens": self.tokens,
             "mentions": [m.to_dict() for m in self.mentions],
-            "relations": [r.to_dict() for r in self.relations]
-            if self.relations
-            else None,
+            "relations": [r.to_dict() for r in self.relations],
         }
 
     def _parse_mentions(self, mentions: List[Dict], tokens: List[Dict]):

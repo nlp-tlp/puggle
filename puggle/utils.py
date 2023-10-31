@@ -88,6 +88,7 @@ def _normalise_quickgraph(doc: Dict):
         del r["label"]
         del r["source_id"]
         del r["target_id"]
-        del r["id"]
+        if "id" in r:
+            del r["id"]
 
     return doc

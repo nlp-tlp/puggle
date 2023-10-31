@@ -10,5 +10,16 @@
             { "head": 1, "tail": 0, "type": "bigger_than" },
             { "head": 1, "tail": 2, "type": "bigger_than" }
         ]
+    },
+    {
+        "tokens": ["one", "three", "two"],
+        "entities": [
+            { "start": 0, "end": 1, "type": "number" },
+            { "start": 1, "end": 2, "type": "number" },
+            { "start": 2, "end": 3, "type": "number" }
+        ]
+    },
+    {
+        "tokens": ["one", "three", "two"]
     }
 ]
