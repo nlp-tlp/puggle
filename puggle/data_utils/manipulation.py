@@ -21,7 +21,7 @@ def drop_entity_class(self: Dataset, entity_class: str):
         a = doc.annotation
 
         updated_mentions = list(
-            filter(lambda m: m.get_first_label() != entity_class, a.mentions)
+            filter(lambda m: m.label != entity_class, a.mentions)
         )
         n_removed_e += len(a.mentions) - len(updated_mentions)
         a.mentions = updated_mentions
@@ -79,8 +79,8 @@ def convert_entity_class(self: Dataset, original_ec: str, modified_ec: str):
     for doc in self.documents:
         a = doc.annotation
         for m in a.mentions:
-            if m.get_first_label() == original_ec:
-                m.labels[0] = modified_ec
+            if m.label == original_ec:
+                m.label = modified_ec
                 n_modified += 1
     logger.info(
         f'Convert Entity class "{original_ec}" -> "{modified_ec}": '
@@ -115,14 +115,14 @@ def flatten_all_entities(self: Dataset):
     """
     :bdg-success-line:`Manipulation`
     Flatten all entities, i.e. resolve all hierarchical entities to their
-    base class, and remove all but the first label. For example,
+    base class. For example,
     ["state/desirable"] becomes ["state"], etc.
     """
     n_modified = 0
     for doc in self.documents:
         a = doc.annotation
         for m in a.mentions:
-            m.labels = [m.get_first_label().split("/")[0]]
+            m.label = m.label.split("/")[0]
         n_modified += len(a.mentions)
     logger.info(
         f"Successfully flattened all {n_modified} entities in dataset."

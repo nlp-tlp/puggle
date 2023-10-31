@@ -33,7 +33,7 @@ class Annotation(object):
             tokens (list): The list of tokens of the document.
             mentions (list): The list of mentions of the document. Each
                mention must follow the correct format ('start', 'end',
-               'labels').
+               'label').
             relations (list, optional): The list of relations of the
                document. Each relation must follow the correct format
                ('start', 'end', 'type').
@@ -87,15 +87,13 @@ class Annotation(object):
         # so that relations can be correctly created.
         self._mention_ids_map = {}
 
-        label_key = "labels"
-
         for i, m in enumerate(mentions):
             try:
                 m_obj = Mention(
                     m["start"],
                     m["end"],
                     tokens[m["start"] : m["end"]],
-                    m[label_key],
+                    m["label"],
                     i,
                 )
                 self._mention_ids_map[i] = m_obj
@@ -103,7 +101,7 @@ class Annotation(object):
                 logger.error(
                     f"Could not parse document due to "
                     "missing keys. The 'mentions' must have 'start', 'end', "
-                    "and 'labels'."
+                    "and 'label'."
                 )
 
             if str(m_obj) not in seen_mentions:
@@ -139,15 +137,8 @@ class Annotation(object):
             except KeyError as e:
                 raise KeyError(
                     f"Could not parse relations of document "
-                    "due to missing keys. The 'relations' key of each "
-                    "document must have 'start', 'end', "
-                    "and 'type'."
-                )
-            except IndexError as e:
-                raise IndexError(
-                    f"Could not parse relations of document "
-                    " because the mention corresponding to the relation with "
-                    f" start: {r['start']} and end: {r['end']} was not found."
+                    "because the mention corresponding to the relation with "
+                    f"start: {r['start']} and end: {r['end']} was not found."
                 )
             except ValueError as e:
                 raise ValueError(
@@ -156,13 +147,6 @@ class Annotation(object):
                 )
 
         return relations_list
-
-    def flatten(self):
-        """Flatten this doc, i.e. ensure each mention only has one label."""
-        for m in self.mentions:
-            m.labels = [m.get_first_label()]
-            if m.labels is None:
-                del m
 
     @staticmethod
     def from_dict(d: dict):
@@ -197,23 +181,17 @@ class Annotation(object):
 
         mention_key = "entities"
 
-        if mention_key not in d:
+        if "tokens" not in d or mention_key not in d or "relations" not in d:
             raise ValueError(
-                "Could not parse document as it does not have "
-                f"a {mention_key} key."
+                "Dictionary must contain tokens, entities, and relations."
+                + str(e)
             )
 
-        try:
-            annotation = Annotation(
-                tokens=d["tokens"],
-                mentions=d[mention_key],
-                relations=d["relations"],
-            )
-        except KeyError as e:
-            print(d)
-            raise ValueError(
-                "Dictionary must contain tokens, mentions, and relations."
-            )
+        annotation = Annotation(
+            tokens=d["tokens"],
+            mentions=d[mention_key],
+            relations=d["relations"],
+        )
 
         return annotation
 

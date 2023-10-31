@@ -205,12 +205,12 @@ def _get_entity_score(document: Document, sample_set: list[Document]):
 
     entity_scores = []
     for m in document.annotation.mentions:
-        label = m.get_first_label()
+        label = m.label
 
         freq = 0
         for other_doc in sample_set:
             for m in other_doc.annotation.mentions:
-                if label == m.get_first_label():
+                if label == m.label:
                     freq += 1
                     break
         es = freq / len(sample_set)

@@ -28,7 +28,6 @@ def get_entity_label_counts(self: Dataset, document_level=False):
     The frequency is the number of times that entity_label has been used.
 
     Args:
-        dataset (Dataset): The dataset to use.
         document_level (bool, optional): If True, the counts will be the
            number of documents in which the entity label appears, rather than
            the total frequency of that entity label.
@@ -39,17 +38,19 @@ def get_entity_label_counts(self: Dataset, document_level=False):
     counts_dict = {}
     counts = []
     for d in self.documents:
+        seen_this_doc = set()
         for m in d.annotation.mentions:
-            label = m.get_first_label()
+            label = m.label
             if label not in counts_dict:
                 counts_dict[label] = 0
-            counts_dict[label] += 1
-            if document_level:
-                break
+            if label not in seen_this_doc or not document_level:
+                counts_dict[label] += 1
+            seen_this_doc.add(label)
 
     sorted_counts = sorted(
         counts_dict.items(), key=lambda x: x[1], reverse=True
     )
+
     return sorted_counts
 
 

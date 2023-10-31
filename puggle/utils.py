@@ -32,8 +32,6 @@ def normalise_annotation_format(doc: Dict, anns_format: str):
     elif anns_format == "spert":
         return _normalise_spert(doc)
 
-    return doc
-
 
 def _normalise_spert(doc: Dict):
     """Normalise the spert-formatted JSON to be parsable by puggle.
@@ -45,12 +43,14 @@ def _normalise_spert(doc: Dict):
         Dict: The parsed document.
     """
     for i, m in enumerate(doc["entities"]):
-        m["labels"] = [m["type"]]
+        m["label"] = m["type"]
         del m["type"]
 
     for r in doc["relations"]:
         r["start"] = r["head"]
         r["end"] = r["tail"]
+        del r["head"]
+        del r["tail"]
 
     return doc
 
@@ -66,10 +66,10 @@ def _normalise_quickgraph(doc: Dict):
     """
     entity_idxs = {}
     for i, m in enumerate(doc["entities"]):
-        m["labels"] = [m["label"]]
-        del m["label"]
+        m["label"] = m["label"]
         entity_idxs[m["id"]] = i
         m["end"] = m["end"] + 1
+        del m["id"]
 
     for r in doc["relations"]:
         r["start"] = entity_idxs[r["source_id"]]
@@ -78,5 +78,6 @@ def _normalise_quickgraph(doc: Dict):
         del r["label"]
         del r["source_id"]
         del r["target_id"]
+        del r["id"]
 
     return doc

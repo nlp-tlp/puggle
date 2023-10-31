@@ -8,3 +8,4 @@ data-out.json
 data-out-random.json
 data-out-smart.json
 data-out-manip.json
+htmlcov/*

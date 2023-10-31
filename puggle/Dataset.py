@@ -187,9 +187,9 @@ class Dataset(object):
                 # Create relationship between head and tail
                 cypher = (
                     f"MATCH (d:Document {{doc_idx: {i}}})\n"
-                    f"MERGE (e1:Entity:{rel.start.get_first_label()} {{name: "
+                    f"MERGE (e1:Entity:{rel.start.label} {{name: "
                     f"\"{' '.join(rel.start.tokens)}\"}})\n"
-                    f"MERGE (e2:Entity:{rel.end.get_first_label()}  {{name: "
+                    f"MERGE (e2:Entity:{rel.end.label}  {{name: "
                     f"\"{' '.join(rel.end.tokens)}\"}})\n"
                     f"MERGE (e1)-[r:{rel.label}]->(e2)\n"
                     f"MERGE (e1)-[:APPEARS_IN]->(d)\n"
@@ -209,15 +209,15 @@ class Dataset(object):
         """
         self.documents.append(document)
 
-    def create_neo4j_csvs():
-        """A function to generate a set of CSVs to load into Neo4j via
-        IMPORT statements (an alternative for those who want to be able
-        to save their graph to disk somehow and import it later/elsewhere).
+    # def create_neo4j_csvs():
+    #     """A function to generate a set of CSVs to load into Neo4j via
+    #     IMPORT statements (an alternative for those who want to be able
+    #     to save their graph to disk somehow and import it later/elsewhere).
 
-        Raises:
-            NotImplementedError: Description
-        """
-        raise NotImplementedError
+    #     Raises:
+    #         NotImplementedError: Description
+    #     """
+    #     raise NotImplementedError
 
     def _load_structured_data(self, filename: os.path):
         """Load a list of structured data from the given file.
@@ -252,9 +252,9 @@ class Dataset(object):
             [{
                 "tokens": ["one", "three", "two"],
                 "mentions": [
-                    { "start": 0, "end": 1, "labels": ["number"] },
-                    { "start": 1, "end": 2, "labels": ["number"] },
-                    { "start": 2, "end": 3, "labels": ["number"] }
+                    { "start": 0, "end": 1, "label": "number" },
+                    { "start": 1, "end": 2, "label": "number" },
+                    { "start": 2, "end": 3, "label": "number" }
                 ],
                 "relations": [
                     { "start": 1, "end": 0, "type": "bigger_than" },
@@ -317,6 +317,15 @@ class Dataset(object):
         """
         return f"Dataset containing {len(self.documents)} documents."
 
+    def to_list(self):
+        """Return a list representation of this dataset.
+
+        Returns:
+            list[Dict]: A list of Dicts, where each Dict is one document from
+               this dataset.
+        """
+        return [doc.to_dict() for doc in self.documents]
+
 
 def _to_quickgraph(dataset: Dataset) -> List[Dict]:
     """Convert the given Dataset to a list of dicts compatible with Quickgraph.
@@ -340,7 +349,7 @@ def _to_quickgraph(dataset: Dataset) -> List[Dict]:
                     "id": str(i + 1),
                     "start": m.start,
                     "end": m.end - 1,
-                    "label": m.get_first_label(),
+                    "label": m.label,
                 }
             )
 

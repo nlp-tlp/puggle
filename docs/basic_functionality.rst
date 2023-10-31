@@ -156,7 +156,7 @@ The `json` format simply dumps each document into a JSON object. An example of o
     }
 
 The `quickgraph` output can be fed directly into QuickGraph to use for
-creating a preannotated project (see `here <https://docs.quickgraph.tech/advanced-tutorials/adv-tutorial-1-preannotated-project/>`_. An example output of that same document with the `quickgraph` format is as follows:
+creating a preannotated project (see `here <https://docs.quickgraph.tech/advanced-tutorials/adv-tutorial-1-preannotated-project/>`_). An example output of that same document with the `quickgraph` format is as follows:
 
 .. code-block:: json
 
