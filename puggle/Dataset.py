@@ -87,8 +87,11 @@ class Dataset(object):
             d = Document(sf, ann)
             documents.append(d)
 
-        self.documents = documents
-        logger.info(f"Successfully loaded {len(self.documents)} documents.")
+        self.documents += documents
+        logger.info(
+            f"Successfully loaded {len(documents)} documents. "
+            f"Dataset now contains {len(self.documents)} documents in total."
+        )
 
     def save_to_file(self, filename: str, output_format: str = "json"):
         """Save the documents of this dataset to the given filename.
