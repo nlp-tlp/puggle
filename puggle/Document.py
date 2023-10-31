@@ -28,23 +28,6 @@ class Document(object):
         self.fields = structured_fields
         self.annotation = annotation
 
-    def set_annotation(self, annotation: Annotation):
-        """Set this Document's Annotation to the given Annotation.
-
-        Args:
-            annotation (Annotation): An annotation.
-        """
-        self.annotation = annotation
-
-    def set_fields(self, fields: List[Dict]):
-        """Set this Document's structured fields (each of which are
-        key: value pairs) to the given list of dicts.
-
-        Args:
-            fields (List[Dict]): List of fields.
-        """
-        self.fields = fields
-
     def to_dict(self):
         """Return a dict of this Document.
 
@@ -57,3 +40,6 @@ class Document(object):
             if self.annotation
             else None,
         }
+
+    def __str__(self):
+        return str(self.to_dict())

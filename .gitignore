@@ -4,3 +4,8 @@ __pycache__/*
 venv/*
 docs/_build/*
 example_2.py
+data-out.json
+data-out-random.json
+data-out-smart.json
+data-out-manip.json
+htmlcov/*

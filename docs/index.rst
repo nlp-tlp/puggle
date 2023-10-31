@@ -17,13 +17,8 @@ We do not include any code for actually running machine learning models here. Pu
 .. toctree::
    :maxdepth: 2
 
+   self
    installation
    basic_functionality
    data_format
    puggle
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`

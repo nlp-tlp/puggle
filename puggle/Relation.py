@@ -1,4 +1,6 @@
-""" A relation, which is used in the Redcoat documents."""
+""" A relation, which captures the relationship between one
+:class:`~puggle.Annotation.Mention` and another. It is stored by the
+:class:`~puggle.Annotation.Annotation` class."""
 from typing import List
 
 from .Mention import Mention
@@ -9,6 +11,16 @@ class Relation(object):
     labels of the relation."""
 
     def __init__(self, start: Mention, end: Mention, label: str):
+        """Create a new Relation.
+
+        Args:
+            start (Mention): The start (head) Mention.
+            end (Mention): The end (tail) Mention.
+            label (str): The label (type) of the relation.
+
+        Raises:
+            ValueError: If the start and end Mention is the same.
+        """
         super(Relation, self).__init__()
 
         if start == end:

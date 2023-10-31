@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 
 def validate_anns_format(anns_format: str):
@@ -16,14 +16,21 @@ def validate_anns_format(anns_format: str):
 
 
 def normalise_annotation_format(doc: Dict, anns_format: str):
+    """Normalise the given document (as a dict) into a uniform format.
+
+    Args:
+        doc (Dict): The document to normalise.
+        anns_format (str): The annotation format.
+
+    Returns:
+        Dict: The normalised document.
+    """
     validate_anns_format(anns_format)
 
     if anns_format == "quickgraph":
         return _normalise_quickgraph(doc)
     elif anns_format == "spert":
         return _normalise_spert(doc)
-
-    return doc
 
 
 def _normalise_spert(doc: Dict):
@@ -35,13 +42,20 @@ def _normalise_spert(doc: Dict):
     Returns:
         Dict: The parsed document.
     """
+    if "entities" not in doc:
+        doc["entities"] = []
+    if "relations" not in doc:
+        doc["relations"] = []
+
     for i, m in enumerate(doc["entities"]):
-        m["labels"] = [m["type"]]
+        m["label"] = m["type"]
         del m["type"]
 
     for r in doc["relations"]:
         r["start"] = r["head"]
         r["end"] = r["tail"]
+        del r["head"]
+        del r["tail"]
 
     return doc
 
@@ -55,12 +69,17 @@ def _normalise_quickgraph(doc: Dict):
     Returns:
         Dict: The parsed document.
     """
+    if "entities" not in doc:
+        doc["entities"] = []
+    if "relations" not in doc:
+        doc["relations"] = []
+
     entity_idxs = {}
     for i, m in enumerate(doc["entities"]):
-        m["labels"] = [m["label"]]
-        del m["label"]
+        m["label"] = m["label"]
         entity_idxs[m["id"]] = i
         m["end"] = m["end"] + 1
+        del m["id"]
 
     for r in doc["relations"]:
         r["start"] = entity_idxs[r["source_id"]]
@@ -69,5 +88,7 @@ def _normalise_quickgraph(doc: Dict):
         del r["label"]
         del r["source_id"]
         del r["target_id"]
+        if "id" in r:
+            del r["id"]
 
     return doc

@@ -1,4 +1,4 @@
-"""A class that stores documents in Mention format."""
+"""A class that stores the annotations of a Document."""
 
 from typing import List, Dict
 
@@ -13,13 +13,19 @@ import logging as logger
 class Annotation(object):
     """An Annotation for the textual portion of a Document.
     Contains a list of tokens, a list of mentions,
-    a list of relations."""
+    a list of relations.
+
+    :var tokens: A list of tokens (strings).
+    :var mentions: A list of :class:`puggle.Mention.Mention` objects.
+    :var relations: A list of :class:`puggle.Relation.Relation` objects.
+
+    """
 
     def __init__(
         self,
-        tokens: list,
-        mentions: list,
-        relations: list = None,
+        tokens: list[str],
+        mentions: list[Dict],
+        relations: list[Dict] = None,
     ):
         """Create a new Annotation.
 
@@ -27,10 +33,10 @@ class Annotation(object):
             tokens (list): The list of tokens of the document.
             mentions (list): The list of mentions of the document. Each
                mention must follow the correct format ('start', 'end',
-               'mentions'/'entities', 'labels'/'type').
+               'label').
             relations (list, optional): The list of relations of the
                document. Each relation must follow the correct format
-               ('start'/'head', 'end'/'tail', 'type').
+               ('start', 'end', 'type').
         """
         super(Annotation, self).__init__()
         self.tokens = tokens
@@ -39,7 +45,7 @@ class Annotation(object):
         if relations:
             self.relations = self._parse_relations(relations)
         else:
-            self.relations = None
+            self.relations = []
 
     def to_dict(self):
         """Return a dictionary representation of this Annotation.
@@ -51,9 +57,7 @@ class Annotation(object):
         return {
             "tokens": self.tokens,
             "mentions": [m.to_dict() for m in self.mentions],
-            "relations": [r.to_dict() for r in self.relations]
-            if self.relations
-            else None,
+            "relations": [r.to_dict() for r in self.relations],
         }
 
     def _parse_mentions(self, mentions: List[Dict], tokens: List[Dict]):
@@ -81,24 +85,21 @@ class Annotation(object):
         # so that relations can be correctly created.
         self._mention_ids_map = {}
 
-        label_key = "labels"
-
         for i, m in enumerate(mentions):
             try:
                 m_obj = Mention(
                     m["start"],
                     m["end"],
                     tokens[m["start"] : m["end"]],
-                    m[label_key],
+                    m["label"],
                     i,
                 )
                 self._mention_ids_map[i] = m_obj
             except KeyError as e:
                 logger.error(
                     f"Could not parse document due to "
-                    "missing keys. The 'entities/mentions' key of each "
-                    "document must have 'start', 'end', 'tokens', "
-                    "and either 'labels' or 'type'."
+                    "missing keys. The 'mentions' must have 'start', 'end', "
+                    "and 'label'."
                 )
 
             if str(m_obj) not in seen_mentions:
@@ -134,15 +135,8 @@ class Annotation(object):
             except KeyError as e:
                 raise KeyError(
                     f"Could not parse relations of document "
-                    "due to missing keys. The 'relations' key of each "
-                    "document must have 'start', 'end', "
-                    "and 'type'."
-                )
-            except IndexError as e:
-                raise IndexError(
-                    f"Could not parse relations of document "
-                    " because the mention corresponding to the relation with "
-                    f" start: {r['start']} and end: {r['end']} was not found."
+                    "because the mention corresponding to the relation with "
+                    f"start: {r['start']} and end: {r['end']} was not found."
                 )
             except ValueError as e:
                 raise ValueError(
@@ -151,13 +145,6 @@ class Annotation(object):
                 )
 
         return relations_list
-
-    def flatten(self):
-        """Flatten this doc, i.e. ensure each mention only has one label."""
-        for m in self.mentions:
-            m.labels = [m.get_first_label()]
-            if m.labels is None:
-                del m
 
     @staticmethod
     def from_dict(d: dict):
@@ -173,6 +160,12 @@ class Annotation(object):
             ValueError: If the dictionary is missing a required
             key.
         """
+
+        # If any required keys are missing, raise an error.
+        if "tokens" not in d or "entities" not in d or "relations" not in d:
+            raise ValueError(
+                "Dictionary must contain tokens, entities, and relations."
+            )
 
         # Validate things such as max word length, sent length, etc,
         # before attempting to create Annotation object
@@ -190,25 +183,11 @@ class Annotation(object):
                 f"Sentence must contain at most {MAX_SENT_LENGTH} words."
             )
 
-        mention_key = "entities"
-
-        if mention_key not in d:
-            raise ValueError(
-                "Could not parse document as it does not have "
-                f"a {mention_key} key."
-            )
-
-        try:
-            annotation = Annotation(
-                tokens=d["tokens"],
-                mentions=d[mention_key],
-                relations=d["relations"],
-            )
-        except KeyError as e:
-            print(d)
-            raise ValueError(
-                "Dictionary must contain tokens, mentions, and relations."
-            )
+        annotation = Annotation(
+            tokens=d["tokens"],
+            mentions=d["entities"],
+            relations=d["relations"],
+        )
 
         return annotation
 

@@ -1,0 +1,65 @@
+[
+    {
+        "tokens": ["one", "three", "two"],
+        "entities": [
+            {
+                "id": "<random id 1>",
+                "start": 0,
+                "end": 0,
+                "label": "number"
+            },
+            {
+                "id": "<random id 2>",
+                "start": 1,
+                "end": 1,
+                "label": "number"
+            },
+            {
+                "id": "<random id 3>",
+                "start": 2,
+                "end": 2,
+                "label": "number"
+            }
+        ],
+        "relations": [
+            {
+                "id": "<random id 4>",
+                "source_id": "<random id 2>",
+                "target_id": "<random id 1>",
+                "label": "bigger_than"
+            },
+            {
+                "id": "<random id 5>",
+                "source_id": "<random id 2>",
+                "target_id": "<random id 3>",
+                "label": "bigger_than"
+            }
+        ]
+    },
+    {
+        "tokens": ["one", "three", "two"],
+        "entities": [
+            {
+                "id": "<random id 1>",
+                "start": 0,
+                "end": 0,
+                "label": "number"
+            },
+            {
+                "id": "<random id 2>",
+                "start": 1,
+                "end": 1,
+                "label": "number"
+            },
+            {
+                "id": "<random id 3>",
+                "start": 2,
+                "end": 2,
+                "label": "number"
+            }
+        ]
+    },
+    {
+        "tokens": ["one", "three", "two"]
+    }
+]
