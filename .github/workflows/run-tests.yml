@@ -17,6 +17,9 @@ concurrency:
 jobs:
   run-tests:
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       # The `uses` key tells the job to retrieve the action named `actions/checkout`. This is an action that checks out your repository and downloads it to the runner, allowing you to run actions against your code (such as testing tools). You must use the checkout action any time your workflow will use the repository's code or you are using an action defined in the repository.
       - name: Checkout
