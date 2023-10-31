@@ -8,6 +8,6 @@ This library is designed to provide utilities for working with the outputs of en
 -   Enable the connection between structured data (csv) and those annotations
 -   Provide functionality to easily load the structured data + annotations into a Neo4j graph
 
-We do not include any code for actually running machine learning models here. Puggle is purely designed for loading the results of such models into Python-based classes and then easily importing the data into Neo4j.
+We do not include any code for actually running machine learning models here. Puggle is purely designed for loading the results of such models into Python-based classes, (optionally) manipulating that data, and then easily importing the data into Neo4j.
 
 <p align="center">:blue_book: :green_book: :orange_book: <strong>Full README and code documentation available on <a href="https://puggle.readthedocs.io/en/latest/">ReadtheDocs</a>.</strong> :orange_book: :green_book: :blue_book:</p>
