@@ -36,6 +36,6 @@ jobs:
         with:
           source_file: "puggle-pylint-badge.svg"
           destination_repo: "nlp-tlp/badges"
-          user_email: "github-actions[bot]@users.noreply.github.com"
-          user_name: "github-actions[bot]"
+          user_email: "michael.stewart.webdev@gmail.com"
+          user_name: "michael.stewart.webdev"
           commit_message: "Update Puggle Pylint badge"
