@@ -40,8 +40,13 @@ jobs:
           git config user.email "github-actions[bot]"
           git config --unset-all http.https://github.com/.extraheader
 
+          echo "made it 1"
           cp ../puggle-pylint-badge.svg puggle-pylint-badge.svg
+          echo "made it 2"
           git add puggle-pylint-badge.svg
+          echo "made it 3"
           git commit -m "Add new badge"
+          echo "made it 4"
 
           git push --set-upstream origin main
+          echo "made it 5"
