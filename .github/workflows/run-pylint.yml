@@ -22,14 +22,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint pylint-exit anybadge
+          pip install pylint anybadge
       - name: Run Pylint and create badge
         run: |
-          pylint $(git ls-files 'puggle/*.py') | tee ./pylint/pylint.log || pylint-exit $?
+          pylint $(git ls-files 'puggle/*.py') --output ./pylint/pylint.log --exit-zero
       - name: Get Pylint score
         run: |
           PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
-      - name: Create badge
+      - name: Create
         run: |
           anybadge -l pylint --value=$PYLINT_SCORE -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
       - name: Push badge to badges repo
