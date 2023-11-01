@@ -33,8 +33,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "cloning"
           git clone https://user:$GITHUB_TOKEN@github.com/nlp-tlp/badges
 
+          echo "CLONED"
           cd badges
           git config user.name "github-actions[bot]@users.noreply.github.com"
           git config user.email "github-actions[bot]"
