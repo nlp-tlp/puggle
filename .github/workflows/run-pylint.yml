@@ -29,3 +29,9 @@ jobs:
       - name: Create badge
         run: |
           anybadge -l pylint -v 2.22 -f badge.svg 2=red 4=orange 8=yellow 10=green
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: badge
+          path: badge.svg
+          retention-days: 90
