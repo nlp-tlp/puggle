@@ -37,8 +37,8 @@ jobs:
           git clone https://user:$GITHUB_TOKEN@github.com/nlp-tlp/badges
 
           cd my-repo
-          git config user.name "user"
-          git config user.email "dev@example.com"
+          git config user.name "github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]"
           git config --unset-all http.https://github.com/.extraheader
 
           cp ../puggle-pylint-badge.svg puggle-pylint-badge.svg
