@@ -26,3 +26,23 @@ jobs:
       - name: Analysing the code with pylint
         run: |
           pylint $(git ls-files 'puggle/*.py') --exit-zero
+      - name: Create badge
+        run: |
+          anybadge -l pylint -v 2.22 -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
+      - name: Push badge to "Badges" repo
+         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+
+          git clone https://user:$GITHUB_TOKEN@github.com/nlp-tlp/badges
+
+          cd my-repo
+          git config user.name "user"
+          git config user.email "dev@example.com"
+          git config --unset-all http.https://github.com/.extraheader
+
+          cp ../puggle-pylint-badge.svg puggle-pylint-badge.svg
+          git add puggle-pylint-badge.svg
+          git commit -m "Add new badge"
+
+          git push --set-upstream origin main
