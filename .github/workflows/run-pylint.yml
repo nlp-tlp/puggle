@@ -25,7 +25,7 @@ jobs:
           pip install pylint anybadge
       - name: Run Pylint and create badge
         run: |
-          pylint $(git ls-files 'puggle/*.py') --exit-zero | tee ./pylint/pylint.log || pylint-exit $?
+          pylint $(git ls-files 'puggle/*.py') --exit-zero | tee ./pylint/pylint.log
           PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
           anybadge -l pylint --value=$PYLINT_SCORE -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
       - name: Push badge to badges repo
@@ -35,6 +35,6 @@ jobs:
         with:
           source_file: "puggle-pylint-badge.svg"
           destination_repo: "nlp-tlp/badges"
-          user_email: "michael.stewart.webdev@gmail.com"
-          user_name: "michael.stewart.webdev"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          user_name: "github-actions[bot]"
           commit_message: "Update Puggle Pylint badge"
