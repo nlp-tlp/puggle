@@ -6,7 +6,7 @@ You can install this package via poetry::
    pip install poetry
    poetry install
 
-It is also available on PyPI ([link](https://pypi.org/project/puggle/)), so rather than cloning this repo, you can install it via pip::
+It is also available on `PyPI <https://pypi.org/project/puggle/>`_, so rather than cloning this repo, you can install it via pip::
 
    pip install puggle
 

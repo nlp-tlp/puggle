@@ -4,8 +4,6 @@ import os
 import random
 from pathlib import Path
 
-from .test_dataset import dataset
-
 random.seed(123)
 
 

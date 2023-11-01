@@ -3,8 +3,6 @@ import pytest
 import os
 from pathlib import Path
 
-from .test_dataset import dataset, dataset_after
-
 
 @pytest.mark.parametrize(
     "dataset, drop_class, dataset_after",

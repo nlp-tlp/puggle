@@ -3,8 +3,6 @@ import pytest
 import os
 from pathlib import Path
 
-from .test_dataset import dataset
-
 
 @pytest.mark.parametrize(
     "dataset, expected",
