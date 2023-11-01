@@ -26,11 +26,10 @@ jobs:
       - name: Run Pylint and create badge
         run: |
           pylint $(git ls-files 'puggle/*.py') --output pylint.log --exit-zero
-      - name: Get Pylint score
+      - name: Get Pylint score and create badge
         run: |
           PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.log)
-      - name: Create
-        run: |
+          echo $PYLINT_SCORE
           anybadge -l pylint --value=$PYLINT_SCORE -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
       - name: Push badge to badges repo
         uses: dmnemec/copy_file_to_another_repo_action@main
