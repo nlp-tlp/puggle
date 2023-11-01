@@ -29,26 +29,13 @@ jobs:
       - name: Create badge
         run: |
           anybadge -l pylint -v 2.22 -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
-      - name: Push badge to "Badges" repo
+      - name: Push badge to badges repo
+        uses: dmnemec/copy_file_to_another_repo_action@main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "cloning"
-          git clone https://user:$GITHUB_TOKEN@github.com/nlp-tlp/badges
-
-          echo "CLONED"
-          cd badges
-          git config user.name "github-actions[bot]@users.noreply.github.com"
-          git config user.email "github-actions[bot]"
-          git config --unset-all http.https://github.com/.extraheader
-
-          echo "made it 1"
-          cp ../puggle-pylint-badge.svg puggle-pylint-badge.svg
-          echo "made it 2"
-          git add puggle-pylint-badge.svg
-          echo "made it 3"
-          git commit -m "Add new badge"
-          echo "made it 4"
-
-          git push --set-upstream origin main
-          echo "made it 5"
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source_file: "puggle-pylint-badge.svg"
+          destination_repo: "nlp-tlp/badges"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          user_name: "github-actions[bot]"
+          commit_message: "Update Puggle Pylint badge"
