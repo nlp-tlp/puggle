@@ -30,12 +30,11 @@ jobs:
         run: |
           anybadge -l pylint -v 2.22 -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
       - name: Push badge to badges repo
-        uses: dmnemec/copy_file_to_another_repo_action@main
+        uses: nkoppel/push-files-to-another-repository@1.1.0
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source_file: "puggle-pylint-badge.svg"
-          destination_repo: "nlp-tlp/badges"
-          user_email: "michael.stewart.webdev@gmail.com"
-          user_name: "michael.stewart.webdev"
-          commit_message: "Update Puggle Pylint badge"
+          source_files: "puggle-pylint-badge.svg"
+          destination-username: "michael-stewart-webdev"
+          destination-repository: "nlp-tlp/badges"
+          commit-email: "michael-stewart-webdev@gmail.com"
