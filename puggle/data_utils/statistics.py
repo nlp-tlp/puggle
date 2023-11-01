@@ -1,3 +1,4 @@
+"""Statistics-based functions for the Dataset class."""
 from puggle import Dataset
 
 
@@ -36,7 +37,6 @@ def get_entity_label_counts(self: Dataset, document_level=False):
         list[tuple]: A sorted list of (entity_label, freq) pairs.
     """
     counts_dict = {}
-    counts = []
     for d in self.documents:
         seen_this_doc = set()
         for m in d.annotation.mentions:

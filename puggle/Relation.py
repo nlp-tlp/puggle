@@ -1,8 +1,6 @@
 """ A relation, which captures the relationship between one
 :class:`~puggle.Annotation.Mention` and another. It is stored by the
 :class:`~puggle.Annotation.Annotation` class."""
-from typing import List
-
 from .Mention import Mention
 
 

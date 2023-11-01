@@ -55,7 +55,7 @@ def drop_relation_class(self: Dataset, relation_class: str):
     n_removed = 0
     for doc in dataset.documents:
         a = doc.annotation
-        n_removed += sum([r.label == relation_class for r in a.relations])
+        n_removed += sum(r.label == relation_class for r in a.relations)
         a.relations = list(
             filter(lambda r: r.label != relation_class, a.relations)
         )

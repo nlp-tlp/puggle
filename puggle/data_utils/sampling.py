@@ -1,6 +1,6 @@
 """Functions for generating samples from Puggle Datasets."""
 import random
-from puggle import Dataset, Annotation, Document
+from puggle import Dataset, Document
 from puggle.logger import logger
 
 
@@ -61,7 +61,7 @@ def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
         # This will initially be just one document (the randomly selected
         # one from earlier), and will be iteratively built up 1 document
         # at a time.
-        for x in range(num_records - 1):
+        for _ in range(num_records - 1):
             scored_documents = []
             for doc in documents:
                 if doc in sample_set:
@@ -94,7 +94,7 @@ def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     # final output dataset.
     scored_sets.sort(key=lambda x: x[1], reverse=True)
     logger.debug(f"Average scores of each of the {num_samples} sample sets:")
-    for docs, score in scored_sets:
+    for _, score in scored_sets:
         logger.debug(score)
 
     logger.debug(
@@ -120,10 +120,7 @@ def _calculate_sample_quality(
         float: The final score.
     """
     average_score = sum(
-        [
-            _calculate_document_score(doc, full_dataset)
-            for doc in sample_dataset
-        ]
+        _calculate_document_score(doc, full_dataset) for doc in sample_dataset
     ) / len(sample_dataset)
     return average_score
 
@@ -244,7 +241,7 @@ def _get_relation_score(document: Document, sample_set: list[Document]):
         label = r.label
         freq = 0
         for other_doc in sample_set:
-            for m in other_doc.annotation.relations:
+            for _ in other_doc.annotation.relations:
                 if label == r.label:
                     freq += 1
                     break

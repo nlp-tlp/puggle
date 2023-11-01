@@ -3,7 +3,6 @@
 import os
 import json
 import csv
-import random
 import logging as logger
 from json import JSONDecodeError
 from typing import Dict, List
@@ -279,7 +278,7 @@ class Dataset(object):
         if not filename.endswith(".json"):
             raise ValueError("File must be a JSON file.")
         annotations = []
-        with open(filename, "r") as f:
+        with open(filename, "r", encoding="utf-8") as f:
             try:
                 d = json.load(f)
 
@@ -303,7 +302,7 @@ class Dataset(object):
                 else:
                     anns = d
 
-                for i, ann in enumerate(anns):
+                for ann in anns:
                     doc = normalise_annotation_format(ann, anns_format)
 
                     annotations.append(Annotation.from_dict(ann))

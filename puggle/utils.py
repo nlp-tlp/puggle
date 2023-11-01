@@ -1,4 +1,5 @@
-from typing import Dict, List
+"""Utility functions such as normalising annotation formats, etc."""
+from typing import Dict
 
 
 def validate_anns_format(anns_format: str):
@@ -29,8 +30,7 @@ def normalise_annotation_format(doc: Dict, anns_format: str):
 
     if anns_format == "quickgraph":
         return _normalise_quickgraph(doc)
-    elif anns_format == "spert":
-        return _normalise_spert(doc)
+    return _normalise_spert(doc)
 
 
 def _normalise_spert(doc: Dict):
@@ -47,7 +47,7 @@ def _normalise_spert(doc: Dict):
     if "relations" not in doc:
         doc["relations"] = []
 
-    for i, m in enumerate(doc["entities"]):
+    for m in doc["entities"]:
         m["label"] = m["type"]
         del m["type"]
 
