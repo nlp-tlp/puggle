@@ -2,7 +2,7 @@
 class."""
 
 
-class Mention(object):
+class Mention:
     """A single entity mention. Captures the start, end, tokens and
     labels of the mention."""
 
@@ -24,7 +24,7 @@ class Mention(object):
             mention_id (int): The index of this mention with respect to the
                Document in which it appears.
         """
-        super(Mention, self).__init__()
+        super().__init__()
         if start == end:
             raise ValueError(
                 "Mention start index cannot be the same as its end index."

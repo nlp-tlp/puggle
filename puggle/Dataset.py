@@ -31,7 +31,7 @@ class Dataset(object):
         """Create an empty Dataset. Documents may be loaded via the
         :func:`puggle.Dataset.Dataset.load_documents` function.
         """
-        super(Dataset, self).__init__()
+        super().__init__()
         self.documents = []
 
     def load_documents(
@@ -112,16 +112,16 @@ class Dataset(object):
             )
 
         if output_format == "json":
-            with open(filename, "w") as f:
+            with open(filename, "w", encoding="utf-8") as f:
                 json.dump(
                     [doc.to_dict() for doc in self.documents], f, indent=2
                 )
         elif output_format == "quickgraph":
             quickgraph_docs = _to_quickgraph(self)
-            with open(filename, "w") as f:
-                json.dump([doc for doc in quickgraph_docs], f, indent=2)
+            with open(filename, "w", encoding="utf-8") as f:
+                json.dump(quickgraph_docs, f, indent=2)
 
-        logger.info(f"Saved dataset to {filename}.")
+        logger.info(f"Saved dataset to %s." % filename)
 
     def load_into_neo4j(self, recreate=False):
         """Load the Dataset into a Neo4j database.
@@ -241,7 +241,7 @@ class Dataset(object):
             raise ValueError("File must be a CSV file.")
 
         documents = []
-        with open(filename, "r") as f:
+        with open(filename, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 documents.append(row)
@@ -298,7 +298,7 @@ class Dataset(object):
                                 "see the readme for more details."
                             )
                         anns = []
-                        for k, v in d.items():
+                        for _, v in d.items():
                             anns += v
                 else:
                     anns = d

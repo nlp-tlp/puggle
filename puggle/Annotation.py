@@ -10,7 +10,7 @@ from .size_limits import MAX_SENT_LENGTH, MAX_WORD_LENGTH
 import logging as logger
 
 
-class Annotation(object):
+class Annotation:
     """An Annotation for the textual portion of a Document.
     Contains a list of tokens, a list of mentions,
     a list of relations.
@@ -38,7 +38,7 @@ class Annotation(object):
                document. Each relation must follow the correct format
                ('start', 'end', 'type').
         """
-        super(Annotation, self).__init__()
+        super().__init__()
         self.tokens = tokens
         self._mention_ids_map = {}
         self.mentions = self._parse_mentions(mentions, tokens)
@@ -95,9 +95,9 @@ class Annotation(object):
                     i,
                 )
                 self._mention_ids_map[i] = m_obj
-            except KeyError as e:
-                logger.error(
-                    f"Could not parse document due to "
+            except KeyError:
+                raise KeyError(
+                    "Could not parse document due to "
                     "missing keys. The 'mentions' must have 'start', 'end', "
                     "and 'label'."
                 )

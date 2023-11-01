@@ -6,7 +6,7 @@ from typing import List, Dict
 from .Annotation import Annotation
 
 
-class Document(object):
+class Document:
 
     """A class representing a single Document.
     Contains an optional Annotation, and a list of fields.
@@ -24,7 +24,7 @@ class Document(object):
             annotation (Annotation, optional): The Annotation of the textual
                part of this document (such as annotations over the short text)
         """
-        super(Document, self).__init__()
+        super().__init__()
         self.fields = structured_fields
         self.annotation = annotation
 

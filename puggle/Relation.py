@@ -6,7 +6,7 @@ from typing import List
 from .Mention import Mention
 
 
-class Relation(object):
+class Relation:
     """A single relation. Captures the start mention, end mention, tokens and
     labels of the relation."""
 
@@ -21,7 +21,7 @@ class Relation(object):
         Raises:
             ValueError: If the start and end Mention is the same.
         """
-        super(Relation, self).__init__()
+        super().__init__()
 
         if start == end:
             raise ValueError(
