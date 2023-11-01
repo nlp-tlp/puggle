@@ -25,10 +25,10 @@ jobs:
           pip install pylint anybadge
       - name: Run Pylint and create badge
         run: |
-          pylint $(git ls-files 'puggle/*.py') --output ./pylint/pylint.log --exit-zero
+          pylint $(git ls-files 'puggle/*.py') --output pylint.log --exit-zero
       - name: Get Pylint score
         run: |
-          PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
+          PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.log)
       - name: Create
         run: |
           anybadge -l pylint --value=$PYLINT_SCORE -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
