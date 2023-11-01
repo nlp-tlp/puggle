@@ -23,12 +23,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pylint anybadge
-      - name: Analysing the code with pylint
+      - name: Run Pylint and create badge
         run: |
-          pylint $(git ls-files 'puggle/*.py') --exit-zero
-      - name: Create badge
-        run: |
-          anybadge -l pylint -v 2.22 -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
+          pylint $(git ls-files 'puggle/*.py') --exit-zero | tee ./pylint/pylint.log || pylint-exit $?
+          PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
+          anybadge -l pylint --value=$PYLINT_SCORE -f puggle-pylint-badge.svg 2=red 4=orange 8=yellow 10=green
       - name: Push badge to badges repo
         uses: dmnemec/copy_file_to_another_repo_action@main
         env:
