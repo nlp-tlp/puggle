@@ -102,12 +102,13 @@ class Dataset(object):
         Args:
             filename (str): The filename to save to.
             output_format (str): The format to save to. 'json' will save as a
-               json file without any special formatting. 'quickgraph' will save
+               json file without any special formatting. 'spert' will save it
+               ready for using in SPERT. 'quickgraph' will save
                as a json file that can be loaded directly into quickgraph.
         """
-        if output_format not in ["json", "quickgraph"]:
+        if output_format not in ["json", "spert", "quickgraph"]:
             raise ValueError(
-                "Output format must be either 'json' or 'quickgraph'"
+                "Output format must be either 'json', 'spert' or 'quickgraph'"
             )
 
         if output_format == "json":
@@ -115,6 +116,10 @@ class Dataset(object):
                 json.dump(
                     [doc.to_dict() for doc in self.documents], f, indent=2
                 )
+        elif output_format == "spert":
+            spert_docs = _to_spert(self)
+            with open(filename, "w", encoding="utf-8") as f:
+                json.dump(spert_docs, f, indent=2)
         elif output_format == "quickgraph":
             quickgraph_docs = _to_quickgraph(self)
             with open(filename, "w", encoding="utf-8") as f:
@@ -376,3 +381,47 @@ def _to_quickgraph(dataset: Dataset) -> List[Dict]:
         }
         quickgraph_docs.append(qd)
     return quickgraph_docs
+
+
+def _to_spert(dataset: Dataset) -> List[Dict]:
+    """Convert the given Dataset to a list of dicts compatible with SPERT.
+
+    Args:
+        dataset (Dataset): The dataset to convert.
+
+    Returns:
+        List[Dict]: A list of SPERT-compatible data.
+    """
+    spert_docs = []
+    for doc in dataset.documents:
+        ann = doc.annotation
+
+        entities = []
+        relations = []
+
+        for m in ann.mentions:
+            entities.append(
+                {
+                    "start": m.start,
+                    "end": m.end,
+                    "type": m.label,
+                }
+            )
+
+        for i, r in enumerate(ann.relations):
+            relations.append(
+                {
+                    "head": r.start.mention_id,
+                    "tail": r.end.mention_id,
+                    "type": r.label,
+                }
+            )
+
+        sd = {
+            "tokens": ann.tokens,
+            "entities": entities,
+            "relations": relations,
+        }
+        spert_docs.append(sd)
+
+    return spert_docs

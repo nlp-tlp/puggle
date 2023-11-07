@@ -22,6 +22,34 @@ def random_sample(self: Dataset, num_records: int) -> Dataset:
     return output_dataset
 
 
+def random_split(self: Dataset) -> (Dataset, Dataset, Dataset):
+    """
+    :bdg-primary-line:`sampling`
+    Randomly split this dataset into 3 datasets - 80% train, 10% dev, 10% test.
+
+    Returns:
+        Dataset, Dataset, Dataset: The train, dev and test datasets.
+    """
+
+    rs = random.sample(self.documents, len(self.documents))
+    train = Dataset()
+    dev = Dataset()
+    test = Dataset()
+    for doc in rs[: int(len(rs) * 0.8)]:
+        train.add_document(doc)
+    for doc in rs[int(len(rs) * 0.8) : int(len(rs) * 0.9)]:
+        dev.add_document(doc)
+    for doc in rs[int(len(rs) * 0.9) :]:
+        test.add_document(doc)
+
+    logger.info(
+        "Randomly split dataset into %s train, %s dev and %s test."
+        % (len(train.documents), len(dev.documents), len(test.documents))
+    )
+
+    return train, dev, test
+
+
 def smart_sample(self: Dataset, num_records: int, num_samples: int) -> Dataset:
     """
     :bdg-primary-line:`sampling`
@@ -256,4 +284,5 @@ def _get_relation_score(document: Document, sample_set: list[Document]):
 
 
 Dataset.random_sample = random_sample
+Dataset.random_split = random_split
 Dataset.smart_sample = smart_sample

@@ -38,7 +38,7 @@ jobs:
         run: poetry install --with test
 
       - name: Run tests
-        run: poetry run pytest --cov=puggle
+        run: poetry run pytest --cov=${{ github.event.repository.name }}
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2

@@ -46,4 +46,4 @@ class Mention:
         return {k: v for k, v in self.__dict__.items() if k != "mention_id"}
 
     def __repr__(self):
-        return f"({' '.join(self.tokens)} [{self.label}])"
+        return f"({' '.join(self.tokens)} [{self.label}]) (start: {self.start}, end: {self.end})"
