@@ -308,7 +308,14 @@ class Dataset(object):
                     anns = d
 
                 for ann in anns:
-                    doc = normalise_annotation_format(ann, anns_format)
+                    # Ignore unsaved annotations in QuickGraph
+                    if (
+                        anns_format == "quickgraph"
+                        and "saved" in ann
+                        and not ann["saved"]
+                    ):
+                        continue
+                    normalise_annotation_format(ann, anns_format)
 
                     annotations.append(Annotation.from_dict(ann))
 
