@@ -204,7 +204,7 @@ class Dataset(object):
                 )
                 graph.run(cypher)
             if i > 0 and i % 10 == 0:
-                logger.debug(f"Processed {i} documents")
+                logger.info(f"Processed {i} documents")
         logger.info("Graph creation complete.")
 
     def add_document(self, document: Document):
