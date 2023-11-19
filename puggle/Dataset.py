@@ -203,7 +203,7 @@ class Dataset(object):
                     f"MERGE (e2)-[:APPEARS_IN]->(d)"
                 )
                 graph.run(cypher)
-            if i > 0 and i % 10 == 0:
+            if i > 0 and i % 1000 == 0:
                 logger.info(f"Processed {i} documents")
         logger.info("Graph creation complete.")
 
@@ -216,15 +216,115 @@ class Dataset(object):
         """
         self.documents.append(document)
 
-    # def create_neo4j_csvs():
-    #     """A function to generate a set of CSVs to load into Neo4j via
-    #     IMPORT statements (an alternative for those who want to be able
-    #     to save their graph to disk somehow and import it later/elsewhere).
+    def create_neo4j_csvs(
+        self,
+        documents_path: str,
+        entities_path: str,
+        relations_path: str,
+        document_entities_path: str,
+    ):
+        """A function to generate a set of CSVs to load into Neo4j via
+        IMPORT statements (an alternative for those who want to be able
+        to save their graph to disk somehow and import it later/elsewhere).
 
-    #     Raises:
-    #         NotImplementedError: Description
-    #     """
-    #     raise NotImplementedError
+
+        Args:
+            documents_path (str): Path to save the documents (CSV).
+            entities_path (str): Path to save the entities (CSV).
+            relations_path (str): Path to save the relations (CSV).
+            document_entities_path (str): Path to save the relationships
+              between entities and the documents in which they appear (CSV).
+        """
+
+        docs = set()
+        ents = set()
+        rels = set()
+        doc_ents = set()
+        ent_idxs = {}
+
+        for i, d in enumerate(self.documents):
+            ann = d.annotation
+
+            docs.add(tuple([i]))
+
+            for mention in ann.mentions:
+                t = tuple([mention.label, " ".join(mention.tokens)])
+                ents.add(t)
+                if t not in ent_idxs:
+                    ent_idxs[t] = len(ent_idxs)
+                doc_ents.add(tuple([i, ent_idxs[t]]))
+
+            for rel in ann.relations:
+                e1_idx = ent_idxs[
+                    tuple([rel.start.label, " ".join(rel.start.tokens)])
+                ]
+                e2_idx = ent_idxs[
+                    tuple([rel.end.label, " ".join(rel.end.tokens)])
+                ]
+
+                rels.add(
+                    tuple(
+                        [
+                            e1_idx,
+                            e2_idx,
+                            rel.start.label,
+                            " ".join(rel.start.tokens),
+                            rel.end.label,
+                            " ".join(rel.end.tokens),
+                            rel.label,
+                        ]
+                    )
+                )
+
+        with open(documents_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["doc_idx"])
+            for row in list(docs):
+                writer.writerow(row)
+            logger.info(
+                "Saved %d documents to %s." % (len(docs), documents_path)
+            )
+
+        with open(entities_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["entity_idx", "label", "tokens"])
+            for i, row in enumerate(list(ents)):
+                writer.writerow([ent_idxs[row]] + list(row))
+            logger.info(
+                "Saved %d entities to %s." % (len(ents), entities_path)
+            )
+
+        with open(relations_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(
+                [
+                    "rel_idx",
+                    "e1_idx",
+                    "e2_idx",
+                    "e1_label",
+                    "e1_tokens",
+                    "e2_label",
+                    "e2_tokens",
+                    "rel_label",
+                ]
+            )
+            for i, row in enumerate(list(rels)):
+                writer.writerow([i] + list(row))
+            logger.info(
+                "Saved %d relations to %s." % (len(rels), relations_path)
+            )
+
+        with open(
+            document_entities_path, "w", newline="", encoding="utf-8"
+        ) as f:
+            writer = csv.writer(f)
+            writer.writerow(["doc_idx", "entity_idx"])
+            for row in list(doc_ents):
+                writer.writerow(row)
+            logger.info(
+                "Saved %d document entities to %s."
+                % (len(doc_ents), document_entities_path)
+            )
 
     def _load_structured_data(self, filename: os.path):
         """Load a list of structured data from the given file.
