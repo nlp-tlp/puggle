@@ -241,6 +241,7 @@ class Dataset(object):
         rels = set()
         doc_ents = set()
         ent_idxs = {}
+        rel_freqs = {}
 
         for i, d in enumerate(self.documents):
             ann = d.annotation
@@ -262,20 +263,21 @@ class Dataset(object):
                     tuple([rel.end.label, " ".join(rel.end.tokens)])
                 ]
 
-                rels.add(
-                    tuple(
-                        [
-                            i,
-                            e1_idx,
-                            e2_idx,
-                            rel.start.label,
-                            " ".join(rel.start.tokens),
-                            rel.end.label,
-                            " ".join(rel.end.tokens),
-                            rel.label,
-                        ]
-                    )
+                t = tuple(
+                    [
+                        e1_idx,
+                        e2_idx,
+                        rel.start.label,
+                        " ".join(rel.start.tokens),
+                        rel.end.label,
+                        " ".join(rel.end.tokens),
+                        rel.label,
+                    ]
                 )
+                if t not in rel_freqs:
+                    rel_freqs[t] = 0
+                rel_freqs[t] += 1
+                rels.add(t)
 
         with open(documents_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
@@ -299,7 +301,6 @@ class Dataset(object):
             writer = csv.writer(f)
             writer.writerow(
                 [
-                    "doc_idx",
                     "rel_idx",
                     "e1_idx",
                     "e2_idx",
@@ -308,10 +309,11 @@ class Dataset(object):
                     "e2_label",
                     "e2_tokens",
                     "rel_label",
+                    "frequency",
                 ]
             )
             for i, row in enumerate(list(rels)):
-                writer.writerow([i] + list(row))
+                writer.writerow([i] + list(row) + [rel_freqs[row]])
             logger.info(
                 "Saved %d relations to %s." % (len(rels), relations_path)
             )
