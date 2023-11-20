@@ -265,6 +265,7 @@ class Dataset(object):
                 rels.add(
                     tuple(
                         [
+                            i,
                             e1_idx,
                             e2_idx,
                             rel.start.label,
@@ -298,6 +299,7 @@ class Dataset(object):
             writer = csv.writer(f)
             writer.writerow(
                 [
+                    "doc_idx",
                     "rel_idx",
                     "e1_idx",
                     "e2_idx",
