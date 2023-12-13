@@ -47,11 +47,6 @@ def test_invalid_dictionary():
     missing_tokens = {"entities": [], "relations": []}
     missing_entities = {"tokens": [], "relations": []}
     missing_relations = {"tokens": [], "entities": []}
-    invalid_start_index = {
-        "tokens": ["one", "two"],
-        "entities": [{"start": 0, "end": 0, "label": "number"}],
-        "relations": [],
-    }
 
     # Test 1: Empty dictionary
     with pytest.raises(ValueError) as e:
@@ -72,10 +67,3 @@ def test_invalid_dictionary():
     with pytest.raises(ValueError) as e:
         a = Annotation.from_dict(missing_relations)
     assert str(e.value) == "Dictionary must contain tokens, entities, and relations."
-
-    # Test 5: Invalid start index
-    with pytest.raises(ValueError) as e:
-        a = Annotation.from_dict(invalid_start_index)
-    assert str(e.value) == "Mention start index cannot be the same as its end index."
-        
-test_invalid_dictionary()

@@ -4,85 +4,95 @@ import os
 from pathlib import Path
 from puggle import Dataset
 
+# Test that ValueError is raised when both sd_filename and anns_filename are None
+def test_dataset_loading_no_filenames():
+    d = Dataset()
+    with pytest.raises(ValueError) as e:
+        d.load_documents()
+        assert "Either sd_filename or anns_filename (or both) must be present in order to load Documents." in str(e.value)
 
+# Test that ValueError is raised when an invalid anns_format is provided
+# !! Update the filename
+def test_dataset_loading_invalid_anns_format():
+    d = Dataset()
+    with pytest.raises(ValueError) as e:
+        d.load_documents(sd_filename="TEMP.csv", anns_filename="TEMP.json", anns_format="invalid_format")
+        assert "anns_format must be in" in str(e.value)
+
+# Test that ValueError is raised when there is a mismatch in the length of structured fields and annotations
+@pytest.mark.parametrize(
+    "dataset_json_path, dataset_csv_path",
+    [
+        ("medium", "medium_too_many_docs"),
+        ("medium", "medium_not_enough_docs"),
+    ],
+    indirect=["dataset_json_path", "dataset_csv_path"],
+)
+def test_dataset_loading_mismatched_data(dataset_json_path, dataset_csv_path):
+    d = Dataset()
+    with pytest.raises(ValueError) as e:
+        d.load_documents(
+            sd_filename=dataset_csv_path,
+            anns_filename=dataset_json_path,
+            anns_format="spert",
+        )
+        assert "Mismatch between the length of the structured fields dataset and the annotations dataset." in str(e.value)
+
+# ! Create more test cases for:
+# ! - mismatch, invalid mentions, invalid relations, invalid documents, structured valid data
+# ! Check in Mention, Relation, Annotation
+
+# Test for loading a dataset with invalid mentions 
 @pytest.mark.parametrize(
     "dataset_json_path, error_type, error_msg",
     [
         ("invalid_mentions_1_missing_keys", KeyError, "missing keys"),
         ("invalid_mentions_2_missing_keys", KeyError, "missing keys"),
-        (
-            "invalid_mentions_3_invalid_start_index",
-            ValueError,
-            "start index cannot be the same as its end index",
-        ),
+        ("invalid_mentions_3_invalid_start_index", ValueError, "Mention start index cannot be the same as its end index"),
     ],
     indirect=["dataset_json_path"],
 )
-def test_dataset_loading_invalid_mentions(
-    dataset_json_path, error_type, error_msg
-):
+def test_dataset_loading_invalid_mentions(dataset_json_path, error_type, error_msg):
     d = Dataset()
     with pytest.raises(error_type) as e:
         d.load_documents(anns_filename=dataset_json_path, anns_format="spert")
         assert error_msg in e.message
 
+# Test for loading a dataset with invalid relations
+@pytest.mark.parametrize(
+    "dataset_json_path, error_type, error_msg",
+    [
+        ("invalid_relations_1_mention_linked_to_itself", ValueError, "Cannot create relation between a mention and itself"),
+        ("invalid_relations_2_mention_missing", KeyError, "mention corresponding to the relation"),
+        ("invalid_relations_3_no_entities", KeyError, "mention corresponding to the relation"),
+    ],
+    indirect=["dataset_json_path"],
+)
+def test_dataset_loading_invalid_relations(dataset_json_path, error_type, error_msg):
+    d = Dataset()
+    with pytest.raises(error_type) as e:
+        d.load_documents(anns_filename=dataset_json_path, anns_format="spert")
+        assert error_msg in e.message
 
+# Test for loading a dataset with invalid documents
 @pytest.mark.parametrize(
     "dataset_json_path, error_type, error_msg",
     [
         ("invalid_document_1_long_word", ValueError, "Word must be at most"),
-        (
-            "invalid_document_2_long_sentence",
-            ValueError,
-            "Sentence must contain at most",
-        ),
-        (
-            "invalid_document_3_missing_tokens",
-            ValueError,
-            "Dictionary must contain tokens, entities, and relations",
-        ),
+        ("invalid_document_2_long_sentence", ValueError, "Sentence must contain at most"),
+        ("invalid_document_3_missing_tokens", ValueError, "Dictionary must contain tokens, entities, and relations"),
+        # ("invalid_document_4_missing_entities", ValueError, "Dictionary must contain tokens, entities, and relations"),
+        # ("invalid_document_5_missing_relations", ValueError, "Dictionary must contain tokens, entities, and relations"),
     ],
     indirect=["dataset_json_path"],
 )
-def test_dataset_loading_invalid_documents(
-    dataset_json_path, error_type, error_msg
-):
+def test_dataset_loading_invalid_documents(dataset_json_path, error_type, error_msg):
     d = Dataset()
     with pytest.raises(error_type) as e:
         d.load_documents(anns_filename=dataset_json_path, anns_format="spert")
         assert error_msg in e.message
 
-
-@pytest.mark.parametrize(
-    "dataset_json_path, error_type, error_msg",
-    [
-        (
-            "invalid_relations_1_mention_linked_to_itself",
-            ValueError,
-            "Cannot create relation between a mention and itself",
-        ),
-        (
-            "invalid_relations_2_mention_missing",
-            KeyError,
-            "Mention corresponding to the relation",
-        ),
-        (
-            "invalid_relations_3_no_entities",
-            KeyError,
-            "Mention corresponding to the relation",
-        ),
-    ],
-    indirect=["dataset_json_path"],
-)
-def test_dataset_loading_invalid_relations(
-    dataset_json_path, error_type, error_msg
-):
-    d = Dataset()
-    with pytest.raises(error_type) as e:
-        d.load_documents(anns_filename=dataset_json_path, anns_format="spert")
-        assert error_msg in e.message
-
-
+# Test for loading a dataset with structured data
 @pytest.mark.parametrize(
     "dataset_json_path, dataset_csv_path, num_documents, num_fields",
     [
@@ -90,9 +100,7 @@ def test_dataset_loading_invalid_relations(
     ],
     indirect=["dataset_json_path", "dataset_csv_path"],
 )
-def test_dataset_loading_with_structured_data(
-    dataset_json_path, dataset_csv_path, num_documents, num_fields
-):
+def test_dataset_loading_with_structured_data(dataset_json_path, dataset_csv_path, num_documents, num_fields):
     d = Dataset()
     d.load_documents(
         sd_filename=dataset_csv_path,
@@ -102,7 +110,7 @@ def test_dataset_loading_with_structured_data(
     assert len(d.documents) == num_documents
     assert len(d.documents[0].fields) == num_fields
 
-
+# Test for correct file formats (CSV and JSON)
 @pytest.mark.parametrize(
     "dataset_json_path, dataset_untyped_path",
     [
@@ -111,9 +119,7 @@ def test_dataset_loading_with_structured_data(
     ],
     indirect=["dataset_json_path", "dataset_untyped_path"],
 )
-def test_dataset_loading_with_structured_data_non_csv(
-    dataset_json_path, dataset_untyped_path
-):
+def test_dataset_loading_with_structured_data_non_csv(dataset_json_path, dataset_untyped_path):
     d = Dataset()
     with pytest.raises(ValueError) as e:
         d.load_documents(
@@ -130,8 +136,6 @@ def test_dataset_loading_with_structured_data_non_csv(
     ],
     indirect=["dataset_untyped_path", "dataset_csv_path"],
 )
-def test_dataset_loading_with_annotated_data_non_json(
-    dataset_untyped_path, dataset_csv_path
 ):
     d = Dataset()
     with pytest.raises(ValueError) as e:
@@ -152,15 +156,6 @@ def test_dataset_loading_with_annotated_data_non_json(
 )
 def test_dataset_loading_with_mismatched_data(
     dataset_json_path, dataset_csv_path
-):
-    d = Dataset()
-    with pytest.raises(ValueError) as e:
-        d.load_documents(
-            sd_filename=dataset_csv_path,
-            anns_filename=dataset_json_path,
-            anns_format="spert",
-        )
-        assert "Mismatch" in e.message
 
 
 @pytest.mark.parametrize(
@@ -185,7 +180,6 @@ def test_dataset_loading_quickgraph(dataset_json_path, num_documents):
         anns_format="quickgraph",
     )
     assert len(d.documents) == num_documents
-
 
 def test_dataset_repr():
     d = Dataset()
