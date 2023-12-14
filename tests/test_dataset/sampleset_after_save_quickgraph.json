@@ -1,0 +1,122 @@
+[
+  {
+    "original": "apple orange banana",
+    "tokens": [
+      "apple",
+      "orange",
+      "banana"
+    ],
+    "entities": [
+      {
+        "id": "1",
+        "start": 0,
+        "end": 0,
+        "label": "fruit"
+      },
+      {
+        "id": "2",
+        "start": 1,
+        "end": 1,
+        "label": "fruit"
+      },
+      {
+        "id": "3",
+        "start": 2,
+        "end": 2,
+        "label": "fruit"
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "2",
+        "target_id": "1",
+        "label": "similar_to"
+      },
+      {
+        "source_id": "2",
+        "target_id": "3",
+        "label": "similar_to"
+      }
+    ]
+  },
+  {
+    "original": "cat dog mouse",
+    "tokens": [
+      "cat",
+      "dog",
+      "mouse"
+    ],
+    "entities": [
+      {
+        "id": "1",
+        "start": 0,
+        "end": 0,
+        "label": "animal"
+      },
+      {
+        "id": "2",
+        "start": 1,
+        "end": 1,
+        "label": "animal"
+      },
+      {
+        "id": "3",
+        "start": 2,
+        "end": 2,
+        "label": "animal"
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "2",
+        "target_id": "1",
+        "label": "similar_to"
+      },
+      {
+        "source_id": "2",
+        "target_id": "3",
+        "label": "similar_to"
+      }
+    ]
+  },
+  {
+    "original": "sun moon star",
+    "tokens": [
+      "sun",
+      "moon",
+      "star"
+    ],
+    "entities": [
+      {
+        "id": "1",
+        "start": 0,
+        "end": 0,
+        "label": "celestial"
+      },
+      {
+        "id": "2",
+        "start": 1,
+        "end": 1,
+        "label": "celestial"
+      },
+      {
+        "id": "3",
+        "start": 2,
+        "end": 2,
+        "label": "celestial"
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "2",
+        "target_id": "1",
+        "label": "similar_to"
+      },
+      {
+        "source_id": "2",
+        "target_id": "3",
+        "label": "similar_to"
+      }
+    ]
+  }
+]

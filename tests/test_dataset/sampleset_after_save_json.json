@@ -1,0 +1,146 @@
+[
+  {
+    "fields": null,
+    "annotations": {
+      "tokens": [
+        "apple",
+        "orange",
+        "banana"
+      ],
+      "mentions": [
+        {
+          "start": 0,
+          "end": 1,
+          "tokens": [
+            "apple"
+          ],
+          "label": "fruit"
+        },
+        {
+          "start": 1,
+          "end": 2,
+          "tokens": [
+            "orange"
+          ],
+          "label": "fruit"
+        },
+        {
+          "start": 2,
+          "end": 3,
+          "tokens": [
+            "banana"
+          ],
+          "label": "fruit"
+        }
+      ],
+      "relations": [
+        {
+          "start": 1,
+          "end": 0,
+          "type": "similar_to"
+        },
+        {
+          "start": 1,
+          "end": 2,
+          "type": "similar_to"
+        }
+      ]
+    }
+  },
+  {
+    "fields": null,
+    "annotations": {
+      "tokens": [
+        "cat",
+        "dog",
+        "mouse"
+      ],
+      "mentions": [
+        {
+          "start": 0,
+          "end": 1,
+          "tokens": [
+            "cat"
+          ],
+          "label": "animal"
+        },
+        {
+          "start": 1,
+          "end": 2,
+          "tokens": [
+            "dog"
+          ],
+          "label": "animal"
+        },
+        {
+          "start": 2,
+          "end": 3,
+          "tokens": [
+            "mouse"
+          ],
+          "label": "animal"
+        }
+      ],
+      "relations": [
+        {
+          "start": 1,
+          "end": 0,
+          "type": "similar_to"
+        },
+        {
+          "start": 1,
+          "end": 2,
+          "type": "similar_to"
+        }
+      ]
+    }
+  },
+  {
+    "fields": null,
+    "annotations": {
+      "tokens": [
+        "sun",
+        "moon",
+        "star"
+      ],
+      "mentions": [
+        {
+          "start": 0,
+          "end": 1,
+          "tokens": [
+            "sun"
+          ],
+          "label": "celestial"
+        },
+        {
+          "start": 1,
+          "end": 2,
+          "tokens": [
+            "moon"
+          ],
+          "label": "celestial"
+        },
+        {
+          "start": 2,
+          "end": 3,
+          "tokens": [
+            "star"
+          ],
+          "label": "celestial"
+        }
+      ],
+      "relations": [
+        {
+          "start": 1,
+          "end": 0,
+          "type": "similar_to"
+        },
+        {
+          "start": 1,
+          "end": 2,
+          "type": "similar_to"
+        }
+      ]
+    }
+  }
+]

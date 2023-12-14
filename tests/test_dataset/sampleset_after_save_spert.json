@@ -1,0 +1,110 @@
+[
+  {
+    "tokens": [
+      "apple",
+      "orange",
+      "banana"
+    ],
+    "entities": [
+      {
+        "start": 0,
+        "end": 1,
+        "type": "fruit"
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "type": "fruit"
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "type": "fruit"
+      }
+    ],
+    "relations": [
+      {
+        "head": 1,
+        "tail": 0,
+        "type": "similar_to"
+      },
+      {
+        "head": 1,
+        "tail": 2,
+        "type": "similar_to"
+      }
+    ]
+  },
+  {
+    "tokens": [
+      "cat",
+      "dog",
+      "mouse"
+    ],
+    "entities": [
+      {
+        "start": 0,
+        "end": 1,
+        "type": "animal"
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "type": "animal"
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "type": "animal"
+      }
+    ],
+    "relations": [
+      {
+        "head": 1,
+        "tail": 0,
+        "type": "similar_to"
+      },
+      {
+        "head": 1,
+        "tail": 2,
+        "type": "similar_to"
+      }
+    ]
+  },
+  {
+    "tokens": [
+      "sun",
+      "moon",
+      "star"
+    ],
+    "entities": [
+      {
+        "start": 0,
+        "end": 1,
+        "type": "celestial"
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "type": "celestial"
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "type": "celestial"
+      }
+    ],
+    "relations": [
+      {
+        "head": 1,
+        "tail": 0,
+        "type": "similar_to"
+      },
+      {
+        "head": 1,
+        "tail": 2,
+        "type": "similar_to"
+      }
+    ]
+  }
+]
