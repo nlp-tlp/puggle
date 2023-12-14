@@ -6,7 +6,10 @@
             { "start": 1, "end": 2, "type": "number" },
             { "start": 2, "end": 3, "type": "number" }
         ],
-        "relations": []
+        "relations": [
+            { "head": 1, "tail": 0, "type": "bigger_than" },
+            { "head": 1, "tail": 2, "type": "bigger_than" }
+        ]
     },
     {
         "tokens": ["bing", "bang", "bong", "smash", "one"],
@@ -17,11 +20,6 @@
             { "start": 3, "end": 4, "type": "noise" },
             { "start": 4, "end": 5, "type": "number" }
         ],
-        "relations": [
-            { "head": 0, "tail": 1, "type": "sounds_like" },
-            { "head": 1, "tail": 2, "type": "sounds_like" },
-            { "head": 2, "tail": 1, "type": "sounds_like" },
-            { "head": 1, "tail": 0, "type": "sounds_like" }
-        ]
+        "relations": []
     }
 ]

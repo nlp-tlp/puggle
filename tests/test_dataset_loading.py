@@ -1,7 +1,4 @@
-import json
 import pytest
-import os
-from pathlib import Path
 from puggle import Dataset
 
 # Test that ValueError is raised when both sd_filename and anns_filename are None
@@ -12,7 +9,6 @@ def test_dataset_loading_no_filenames():
         assert "Either sd_filename or anns_filename (or both) must be present in order to load Documents." in str(e.value)
 
 # Test that ValueError is raised when an invalid anns_format is provided
-# !! Update the filename
 def test_dataset_loading_invalid_anns_format():
     d = Dataset()
     with pytest.raises(ValueError) as e:
@@ -91,7 +87,7 @@ def test_dataset_loading_invalid_documents(dataset_json_path, error_type, error_
     "dataset_json_path, dataset_csv_path, num_documents, num_fields",
     [
         ("medium", "medium", 2, 4),
-        ("sampleset", "sampleset", 3, 5),
+        ("large", "large", 3, 5),
     ],
     indirect=["dataset_json_path", "dataset_csv_path"],
 )

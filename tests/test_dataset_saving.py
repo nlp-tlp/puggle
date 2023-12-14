@@ -1,7 +1,5 @@
 import json
 import pytest
-import os
-from pathlib import Path
 from puggle import Dataset
 
 
@@ -11,9 +9,9 @@ from puggle import Dataset
         ("medium", "json", "medium_after_save_json"),
         ("medium", "spert", "medium_after_save_spert"),
         ("medium", "quickgraph", "medium_after_save_quickgraph"),
-        ("sampleset", "json", "sampleset_after_save_json"),
-        ("sampleset", "spert", "sampleset_after_save_spert"),
-        ("sampleset", "quickgraph", "sampleset_after_save_quickgraph"),
+        ("large", "json", "large_after_save_json"),
+        ("large", "spert", "large_after_save_spert"),
+        ("large", "quickgraph", "large_after_save_quickgraph"),
     ],
     indirect=["dataset", "dataset_json_path"],
 )
@@ -36,7 +34,7 @@ def test_dataset_saving(dataset, output_format, dataset_json_path, tmp_path):
     "dataset, output_format",
     [
         ("medium", "jsoon"),
-        ("sampleset", "quackgraph"),
+        ("large", "quackgraph"),
     ],
     indirect=["dataset"],
 )

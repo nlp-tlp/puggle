@@ -1,15 +1,13 @@
-import json
 import pytest
-import os
-from pathlib import Path
 
 
 @pytest.mark.parametrize(
     "dataset, drop_class, dataset_after",
     [
-        ("empty", "number", "empty"),
+        ("empty", "x", "empty"),
         ("small", "number", "small_after_drop_ec"),
         ("medium", "number", "medium_after_drop_ec"),
+        ("large", "celestial", "large_after_drop_ec"),
     ],
     indirect=["dataset", "dataset_after"],
 )
@@ -21,25 +19,24 @@ def test_dataset_manip_drop_entity_class(dataset, drop_class, dataset_after):
 @pytest.mark.parametrize(
     "dataset, drop_class, dataset_after",
     [
-        ("empty", "x", "empty"),
-        ("small", "x", "small"),
-        ("medium", "x", "medium"),
+        ("small", "noise", "small"),
+        ("medium", "fruit", "medium"),
+        ("large", "number", "large"),
     ],
     indirect=["dataset", "dataset_after"],
 )
-def test_dataset_manip_drop_missing_relation_class(
-    dataset, drop_class, dataset_after
-):
-    dataset.drop_relation_class(drop_class)
+def test_dataset_manip_drop_missing_entity_class(dataset, drop_class, dataset_after):
+    dataset.drop_entity_class(drop_class)
     assert dataset.to_list() == dataset_after.to_list()
 
 
 @pytest.mark.parametrize(
     "dataset, drop_class, dataset_after",
     [
-        ("empty", "bigger_than", "empty"),
+        ("empty", "x", "empty"),
         ("small", "bigger_than", "small_after_drop_rc"),
-        ("medium", "bigger_than", "medium_after_drop_rc"),
+        ("medium", "sounds_like", "medium_after_drop_rc"),
+        ("large", "similar_to", "large_after_drop_rc"),
     ],
     indirect=["dataset", "dataset_after"],
 )
@@ -48,6 +45,21 @@ def test_dataset_manip_drop_relation_class(dataset, drop_class, dataset_after):
     assert dataset.to_list() == dataset_after.to_list()
 
 
+@pytest.mark.parametrize(
+    "dataset, drop_class, dataset_after",
+    [
+        ("small", "sounds_like", "small"),
+        ("medium", "similar_to", "medium"),
+        ("large", "bigger_than", "large"),
+    ],
+    indirect=["dataset", "dataset_after"],
+)
+def test_dataset_manip_drop_missing_relation_class(dataset, drop_class, dataset_after):
+    dataset.drop_relation_class(drop_class)
+    assert dataset.to_list() == dataset_after.to_list()
+
+
+# !!!!!!
 @pytest.mark.parametrize(
     "dataset, class_from, class_to, dataset_after",
     [
