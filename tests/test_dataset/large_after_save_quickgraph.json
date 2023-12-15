@@ -11,31 +11,31 @@
         "id": "1",
         "start": 0,
         "end": 0,
-        "label": "fruit"
+        "label": "fruit/red"
       },
       {
         "id": "2",
         "start": 1,
         "end": 1,
-        "label": "fruit"
+        "label": "fruit/orange"
       },
       {
         "id": "3",
         "start": 2,
         "end": 2,
-        "label": "fruit"
+        "label": "fruit/yellow"
       }
     ],
     "relations": [
       {
         "source_id": "2",
         "target_id": "1",
-        "label": "similar_to"
+        "label": "similar_to/shape"
       },
       {
         "source_id": "2",
         "target_id": "3",
-        "label": "similar_to"
+        "label": "similar_to/taste"
       }
     ]
   },
@@ -91,19 +91,19 @@
         "id": "1",
         "start": 0,
         "end": 0,
-        "label": "celestial"
+        "label": "celestial/sun"
       },
       {
         "id": "2",
         "start": 1,
         "end": 1,
-        "label": "celestial"
+        "label": "celestial/moon"
       },
       {
         "id": "3",
         "start": 2,
         "end": 2,
-        "label": "celestial"
+        "label": "celestial/star"
       }
     ],
     "relations": [

@@ -14,7 +14,7 @@
           "tokens": [
             "apple"
           ],
-          "label": "fruit"
+          "label": "fruit/red"
         },
         {
           "start": 1,
@@ -22,7 +22,7 @@
           "tokens": [
             "orange"
           ],
-          "label": "fruit"
+          "label": "fruit/orange"
         },
         {
           "start": 2,
@@ -30,19 +30,19 @@
           "tokens": [
             "banana"
           ],
-          "label": "fruit"
+          "label": "fruit/yellow"
         }
       ],
       "relations": [
         {
           "start": 1,
           "end": 0,
-          "type": "similar_to"
+          "type": "similar_to/shape"
         },
         {
           "start": 1,
           "end": 2,
-          "type": "similar_to"
+          "type": "similar_to/taste"
         }
       ]
     }
@@ -110,7 +110,7 @@
           "tokens": [
             "sun"
           ],
-          "label": "celestial"
+          "label": "celestial/sun"
         },
         {
           "start": 1,
@@ -118,7 +118,7 @@
           "tokens": [
             "moon"
           ],
-          "label": "celestial"
+          "label": "celestial/moon"
         },
         {
           "start": 2,
@@ -126,7 +126,7 @@
           "tokens": [
             "star"
           ],
-          "label": "celestial"
+          "label": "celestial/star"
         }
       ],
       "relations": [

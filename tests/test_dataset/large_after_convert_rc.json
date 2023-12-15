@@ -18,7 +18,10 @@
             {"start": 1, "end": 2, "type": "animal"},
             {"start": 2, "end": 3, "type": "animal"}
         ],
-        "relations": []
+        "relations": [
+            {"head": 1, "tail": 0, "type": "comparable_to"},
+            {"head": 1, "tail": 2, "type": "comparable_to"}
+        ]
     },
     {
         "tokens": ["sun", "moon", "star"],
@@ -27,6 +30,9 @@
             {"start": 1, "end": 2, "type": "celestial/moon"},
             {"start": 2, "end": 3, "type": "celestial/star"}
         ],
-        "relations": []
+        "relations": [
+            {"head": 1, "tail": 0, "type": "comparable_to"},
+            {"head": 1, "tail": 2, "type": "comparable_to"}
+        ]
     }
 ]

@@ -14,11 +14,14 @@
     {
         "tokens": ["cat", "dog", "mouse"],
         "entities": [
-            {"start": 0, "end": 1, "type": "animal"},
-            {"start": 1, "end": 2, "type": "animal"},
-            {"start": 2, "end": 3, "type": "animal"}
+            {"start": 0, "end": 1, "type": "mammal"},
+            {"start": 1, "end": 2, "type": "mammal"},
+            {"start": 2, "end": 3, "type": "mammal"}
         ],
-        "relations": []
+        "relations": [
+            {"head": 1, "tail": 0, "type": "similar_to"},
+            {"head": 1, "tail": 2, "type": "similar_to"}
+        ]
     },
     {
         "tokens": ["sun", "moon", "star"],
@@ -27,6 +30,9 @@
             {"start": 1, "end": 2, "type": "celestial/moon"},
             {"start": 2, "end": 3, "type": "celestial/star"}
         ],
-        "relations": []
+        "relations": [
+            {"head": 1, "tail": 0, "type": "similar_to"},
+            {"head": 1, "tail": 2, "type": "similar_to"}
+        ]
     }
 ]
