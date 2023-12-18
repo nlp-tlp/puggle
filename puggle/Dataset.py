@@ -159,6 +159,10 @@ class Dataset(object):
 
         if recreate:
             graph.run("MATCH (n) DETACH DELETE (n)")
+            
+        # Flatten all entities and relations
+        self.flatten_all_entities()
+        self.flatten_all_relations()
 
         for i, d in enumerate(self.documents):
             # Create node for document
