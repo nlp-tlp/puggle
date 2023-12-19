@@ -48,7 +48,7 @@ def test_dataset_sampling_random_split(dataset, num_train, num_dev, num_test):
 @pytest.mark.parametrize(
     "dataset, num_records, num_samples",
     [
-        ("empty_document", 1, 1),    # document with no tokens, mentions, relations
+        ("document_missing_all", 1, 1),    # document with no tokens, mentions, relations
         ("medium", 1, 10),
         ("large", 2, 5),
         ("example_dataset_100", 10, 3), 

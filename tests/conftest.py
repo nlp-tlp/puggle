@@ -35,6 +35,30 @@ def dataset_untyped_path(request):
     return os.path.join(FIXTURE_DIR, f"{name}")
 
 
+@pytest.fixture
+def expected_documents_csv(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}.csv")
+
+
+@pytest.fixture
+def expected_entities_csv(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}.csv")
+
+
+@pytest.fixture
+def expected_relations_csv(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}.csv")
+
+
+@pytest.fixture
+def expected_document_entities_csv(request):
+    name = request.param
+    return os.path.join(FIXTURE_DIR, f"{name}.csv")
+
+
 def _get_dataset(request):
     name = request.param
     if name == "empty":

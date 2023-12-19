@@ -1,0 +1,7 @@
+rel_idx,e1_idx,e2_idx,e1_label,e1_tokens,e2_label,e2_tokens,rel_label,frequency
+0,3,4,noise,bing,noise,bang,sounds_like,1
+1,1,0,number,three,number,one,bigger_than,1
+2,5,4,noise,bong,noise,bang,sounds_like,1
+3,1,2,number,three,number,two,bigger_than,1
+4,4,5,noise,bang,noise,bong,sounds_like,1
+5,4,3,noise,bang,noise,bing,sounds_like,1
