@@ -17,7 +17,7 @@ packaging==21.3
 pansi==2020.7.3
 py2neo==2021.2.4
 pydata-sphinx-theme==0.14.2
-Pygments==2.12.0
+Pygments==2.15.0
 pyparsing==3.0.9
 python-dotenv==1.0.0
 pytz==2022.1
