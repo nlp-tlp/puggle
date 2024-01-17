@@ -2,7 +2,7 @@ accessible-pygments==0.0.4
 alabaster==0.7.12
 Babel==2.10.3
 beautifulsoup4==4.12.2
-certifi==2022.6.15
+certifi==2023.7.22
 charset-normalizer==2.1.0
 colorama==0.4.6
 docutils==0.17.1
