@@ -243,10 +243,15 @@ class Dataset(object):
         ent_idxs = {}
         rel_freqs = {}
 
+        document_fieldnames = []
+
         for i, d in enumerate(self.documents):
+            if i == 0:
+                print(d.fields)
+                document_fieldnames = d.fields.keys()
             ann = d.annotation
 
-            docs.add(tuple([i]))
+            docs.add(tuple([i, *d.fields.values()]))
 
             for mention in ann.mentions:
                 t = tuple([mention.label, " ".join(mention.tokens)])
@@ -281,7 +286,7 @@ class Dataset(object):
 
         with open(documents_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow(["doc_idx"])
+            writer.writerow(["doc_idx", *document_fieldnames])
             for row in list(docs):
                 writer.writerow(row)
             logger.info(
