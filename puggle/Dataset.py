@@ -436,6 +436,24 @@ class Dataset(object):
         logger.debug(f"Loaded {len(annotations)} annotations from {filename}.")
         return annotations
 
+    def get_stats(self):
+        """Return a string of some useful stats of this dataset.
+
+        Returns:
+            str: Stats (num docs, mentions, rels)
+        """
+        num_mentions = sum(
+            [len(doc.annotation.mentions) for doc in self.documents]
+        )
+        num_relations = sum(
+            [len(doc.annotation.relations) for doc in self.documents]
+        )
+
+        return (
+            f"Dataset containing {len(self.documents)} documents, "
+            f" {num_mentions} mentions, and {num_relations} relations."
+        )
+
     def __repr__(self):
         """String representation of the dataset.
 
@@ -538,6 +556,10 @@ def _to_spert(dataset: Dataset) -> List[Dict]:
             "entities": entities,
             "relations": relations,
         }
+        # If the document has a document index (after sentence splitting),
+        # carry that through to the output
+        if doc.document_index is not None:
+            sd["document_index"] = doc.document_index
         spert_docs.append(sd)
 
     return spert_docs

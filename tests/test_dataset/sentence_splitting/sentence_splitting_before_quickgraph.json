@@ -1,0 +1,75 @@
+[
+  {
+    "original": "one three two . six two",
+    "tokens": ["one", "three", "two", ".", "six", "two"],
+    "entities": [
+      {
+        "id": "1",
+        "start": 0,
+        "end": 0,
+        "label": "number"
+      },
+      {
+        "id": "2",
+        "start": 1,
+        "end": 1,
+        "label": "number"
+      },
+      {
+        "id": "3",
+        "start": 2,
+        "end": 2,
+        "label": "number"
+      },
+      {
+        "id": "4",
+        "start": 4,
+        "end": 4,
+        "label": "number"
+      },
+      {
+        "id": "5",
+        "start": 5,
+        "end": 5,
+        "label": "number"
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "2",
+        "target_id": "1",
+        "label": "bigger_than"
+      },
+      {
+        "source_id": "2",
+        "target_id": "3",
+        "label": "bigger_than"
+      },
+      {
+        "source_id": "4",
+        "target_id": "1",
+        "label": "bigger_than"
+      },
+      {
+        "source_id": "4",
+        "target_id": "2",
+        "label": "bigger_than"
+      },
+      {
+        "source_id": "4",
+        "target_id": "3",
+        "label": "bigger_than"
+      },
+      {
+        "source_id": "4",
+        "target_id": "5",
+        "label": "bigger_than"
+      },
+      {
+        "source_id": "5",
+        "target_id": "1",
+        "label": "bigger_than"
+      }
+    ]
+  }
+]

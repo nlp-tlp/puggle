@@ -210,6 +210,7 @@ Puggle also contains functions for manipulating a dataset, for example:
 * :func:`~puggle.Dataset.Dataset.drop_relation_class` removes all instances of the given relation class from a dataset.
 * :func:`~puggle.Dataset.Dataset.convert_entity_class` converts all entities with the given class to another class.
 * :func:`~puggle.Dataset.Dataset.convert_relation_class` converts all relations with the given class to another class.
+* :func:`~puggle.Dataset.Dataset.split_sentences` creates a new `Dataset` by splitting the sentences of the given `Dataset` based on a delimiter (such as a full stop).
 
 For more info, see the :doc:`puggle`.
 

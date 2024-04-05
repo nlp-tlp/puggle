@@ -9,3 +9,5 @@ data-out-random.json
 data-out-smart.json
 data-out-manip.json
 htmlcov/*
+example_3.py
+temp_output.json

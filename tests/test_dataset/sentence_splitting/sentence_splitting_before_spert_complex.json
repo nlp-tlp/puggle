@@ -1,0 +1,316 @@
+[
+  {
+    "tokens": ["one", "three", "two", ".", "six", "two", ".", "eight"],
+    "entities": [
+      {
+        "start": 0,
+        "end": 1,
+        "type": "number"
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "type": "number"
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "type": "number"
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "type": "number"
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "type": "number"
+      },
+      {
+        "start": 7,
+        "end": 8,
+        "type": "number"
+      }
+    ],
+    "relations": [
+      {
+        "head": 1,
+        "tail": 0,
+        "type": "bigger_than"
+      },
+      {
+        "head": 1,
+        "tail": 2,
+        "type": "bigger_than"
+      },
+      {
+        "head": 3,
+        "tail": 0,
+        "type": "bigger_than"
+      },
+      {
+        "head": 3,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 3,
+        "tail": 2,
+        "type": "bigger_than"
+      },
+      {
+        "head": 3,
+        "tail": 4,
+        "type": "bigger_than"
+      },
+      {
+        "head": 4,
+        "tail": 0,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 0,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 2,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 4,
+        "type": "bigger_than"
+      }
+    ]
+  },
+  {
+    "tokens": [
+      "seven",
+      "one",
+      "six",
+      ".",
+      "one",
+      "two",
+      ".",
+      "fifty",
+      "five",
+      "one",
+      "four",
+      ".",
+      "nine",
+      "."
+    ],
+    "entities": [
+      {
+        "start": 0,
+        "end": 1,
+        "type": "number"
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "type": "number"
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "type": "number"
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "type": "number"
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "type": "number"
+      },
+      {
+        "start": 7,
+        "end": 9,
+        "type": "number"
+      },
+      {
+        "start": 9,
+        "end": 10,
+        "type": "number"
+      },
+      {
+        "start": 10,
+        "end": 11,
+        "type": "number"
+      },
+      {
+        "start": 12,
+        "end": 13,
+        "type": "number"
+      }
+    ],
+    "relations": [
+      {
+        "head": 0,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 2,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 0,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 2,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 0,
+        "tail": 4,
+        "type": "bigger_than"
+      },
+      {
+        "head": 2,
+        "tail": 4,
+        "type": "bigger_than"
+      },
+      {
+        "head": 4,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 4,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 0,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 2,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 4,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 6,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 7,
+        "type": "bigger_than"
+      },
+      {
+        "head": 5,
+        "tail": 8,
+        "type": "bigger_than"
+      },
+      {
+        "head": 0,
+        "tail": 6,
+        "type": "bigger_than"
+      },
+      {
+        "head": 2,
+        "tail": 6,
+        "type": "bigger_than"
+      },
+      {
+        "head": 4,
+        "tail": 6,
+        "type": "bigger_than"
+      },
+      {
+        "head": 7,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 7,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 7,
+        "tail": 4,
+        "type": "bigger_than"
+      },
+      {
+        "head": 7,
+        "tail": 6,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 0,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 1,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 2,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 3,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 4,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 6,
+        "type": "bigger_than"
+      },
+      {
+        "head": 8,
+        "tail": 7,
+        "type": "bigger_than"
+      }
+    ]
+  }
+]

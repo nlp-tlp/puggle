@@ -147,9 +147,49 @@ def flatten_all_relations(self: Dataset):
     )
 
 
+def split_sentences(self: Dataset, delimiter="."):
+    """Split each document of this Dataset into sentences.
+
+    Args:
+        delimiter (str, optional): The delimiter to use for splitting.
+
+    Returns:
+        Dataset: A new dataset, where each document is a sentence. Each doc
+        also has a document_index, allowing the user to know which doc
+        the sentence originally came from.
+    """
+    new_dataset = Dataset()
+    all_relations_removed = []
+
+    for i, d in enumerate(self.documents):
+        sents, relations_removed = d.split_sentences(delimiter=delimiter)
+        for s in sents:
+            s.document_index = i
+            new_dataset.add_document(s)
+        all_relations_removed += relations_removed
+
+    results = {"relations_removed": len(all_relations_removed)}
+
+    logger.info("Original dataset: %s" % self.get_stats())
+
+    logger.info(
+        "Removed %d relations that spanned multiple sentences."
+        % len(all_relations_removed)
+    )
+    logger.info(
+        "(an average of %.2f relations per document)"
+        % (len(all_relations_removed) / len(self.documents))
+    )
+
+    logger.info("New dataset: %s" % new_dataset.get_stats())
+
+    return new_dataset, results
+
+
 Dataset.drop_entity_class = drop_entity_class
 Dataset.drop_relation_class = drop_relation_class
 Dataset.convert_entity_class = convert_entity_class
 Dataset.convert_relation_class = convert_relation_class
 Dataset.flatten_all_entities = flatten_all_entities
 Dataset.flatten_all_relations = flatten_all_relations
+Dataset.split_sentences = split_sentences
