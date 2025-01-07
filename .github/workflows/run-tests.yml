@@ -40,5 +40,5 @@ jobs:
       - name: Run tests
         run: poetry run pytest --cov=${{ github.event.repository.name }}
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@v2
+      # - name: Coveralls
+      #  uses: coverallsapp/github-action@v2
